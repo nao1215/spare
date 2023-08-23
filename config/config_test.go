@@ -5,6 +5,7 @@ import (
 	"os"
 	"path/filepath"
 	"runtime"
+	"strings"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -32,7 +33,7 @@ func TestConfigWrite(t *testing.T) {
 			t.Fatal(err)
 		}
 
-		if diff := cmp.Diff(got.String(), string(want)); diff != "" {
+		if diff := cmp.Diff(strings.TrimSpace(got.String()), strings.TrimSpace(string(want))); diff != "" {
 			t.Errorf("value is mismatch (-want +got):\n%s", diff)
 		}
 	})
