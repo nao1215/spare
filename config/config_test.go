@@ -9,7 +9,7 @@ import (
 	"github.com/google/go-cmp/cmp"
 )
 
-func TestConfig_Write(t *testing.T) {
+func TestConfigWrite(t *testing.T) {
 	t.Parallel()
 
 	t.Run("success to write yml data", func(t *testing.T) {

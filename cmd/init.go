@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"errors"
 	"os"
 
 	"github.com/nao1215/gorky/file"
@@ -39,7 +40,11 @@ func (i *initializer) Do(_ *cobra.Command) error {
 	if err != nil {
 		return err
 	}
-	defer file.Close()
+	defer func() {
+		if closeErr := file.Close(); closeErr != nil {
+			err = errors.Join(err, closeErr)
+		}
+	}()
 
 	config := config.NewConfig()
 	return config.Write(file)

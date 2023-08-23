@@ -16,18 +16,18 @@ const SpareTemplateVersion string = "0.0.1"
 
 // Config is a struct that corresponds to the configuration file ".spare.yml".
 type Config struct {
-	SpareTemplateVersion string `yaml:"SpareTemplateVersion"`
+	SpareTemplateVersion string `yaml:"spareTemplateVersion"`
 	// DeployTarget is the path of the deploy target (it's SPA).
-	DeployTarget string `yaml:"DeployTarget"`
+	DeployTarget string `yaml:"deployTarget"`
 	// Region is AWS region.
-	Region model.Region `yaml:"Region"`
+	Region model.Region `yaml:"region"`
 	// CustomDomain is the domain name of the CloudFront.
 	// If you do not specify this, the CloudFront default domain name is used.
-	CustomDomain model.Domain `yaml:"CustomDomain"`
+	CustomDomain model.Domain `yaml:"customDomain"`
 	// S3BucketName is the name of the S3 bucket.
-	S3BucketName string `yaml:"S3BucketName"`
+	S3BucketName string `yaml:"s3BucketName"`
 	// CORS is the list of CORS configuration.
-	CORS []model.Domain `yaml:"CORS"`
+	CORS []model.Domain `yaml:"cors"`
 	// TODO: WAF, HTTPS, Cache
 }
 
