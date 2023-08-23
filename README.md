@@ -1,3 +1,11 @@
+[![LinuxUnitTest](https://github.com/nao1215/spare/actions/workflows/linux_test.yml/badge.svg)](https://github.com/nao1215/spare/actions/workflows/linux_test.yml)
+[![MacUnitTest](https://github.com/nao1215/spare/actions/workflows/mac_test.yml/badge.svg)](https://github.com/nao1215/spare/actions/workflows/mac_test.yml)
+[![reviewdog](https://github.com/nao1215/spare/actions/workflows/reviewdog.yml/badge.svg)](https://github.com/nao1215/spare/actions/workflows/reviewdog.yml)
+[![Run Gosec](https://github.com/nao1215/spare/actions/workflows/security.yml/badge.svg)](https://github.com/nao1215/spare/actions/workflows/security.yml)
+![Coverage](https://raw.githubusercontent.com/nao1215/octocovs-central-repo/main/badges/nao1215/spare/coverage.svg)
+[![Go Report Card](https://goreportcard.com/badge/github.com/nao1215/spare)](https://goreportcard.com/report/github.com/nao1215/spare)
+![GitHub](https://img.shields.io/github/license/nao1215/spare)
+
 # spare - Single Page Application Release Easily
 Work in progress: 開発中の期間は、日本語で内容を説明する
 
@@ -24,6 +32,9 @@ Work in progress: 開発中の期間は、日本語で内容を説明する
     
 - [ ] cloudformationサブコマンド
   - createサブコマンドが構築するAWSインフラのCloudFormationテンプレートを出力する
+
+- [ ] validateサブコマンド
+  - 設定ファイルの内容を検証する
   
 ### メモ
 spareは、数あるSPAデプロイ手段の1つ（スペア）という意味で名付けた。

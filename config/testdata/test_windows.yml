@@ -1,0 +1,6 @@
+spareTemplateVersion: 0.0.1
+deployTarget: src
+region: us-east-1
+customDomain: ""
+s3BucketName: ""
+cors: []
