@@ -22,7 +22,7 @@ func TestConfigWrite(t *testing.T) {
 			testFile = filepath.Join("testdata", "test_windows.yml")
 		}
 
-		want, err := os.ReadFile(testFile)
+		want, err := os.ReadFile(filepath.Clean(testFile))
 		if err != nil {
 			t.Fatal(err)
 		}
