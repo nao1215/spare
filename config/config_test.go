@@ -33,7 +33,7 @@ func TestConfigWrite(t *testing.T) {
 			t.Fatal(err)
 		}
 
-		if diff := cmp.Diff(strings.TrimSpace(got.String()), strings.TrimSpace(string(want))); diff != "" {
+		if diff := cmp.Diff(strings.TrimSuffix(got.String(), "\r"), strings.TrimSuffix(string(want), "\r")); diff != "" {
 			t.Errorf("value is mismatch (-want +got):\n%s", diff)
 		}
 	})
