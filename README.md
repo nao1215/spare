@@ -33,6 +33,9 @@ Work in progress: 開発中の期間は、日本語で内容を説明する
     
 - [ ] cloudformationサブコマンド
   - createサブコマンドが構築するAWSインフラのCloudFormationテンプレートを出力する
+
+- [ ] validateサブコマンド
+  - 設定ファイルの内容を検証する
   
 ### メモ
 spareは、数あるSPAデプロイ手段の1つ（スペア）という意味で名付けた。

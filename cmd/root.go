@@ -22,6 +22,7 @@ func newRootCmd() *cobra.Command {
 	cmd.SilenceErrors = true
 	cmd.AddCommand(newVersionCmd())
 	cmd.AddCommand(newBugReportCmd())
+	cmd.AddCommand(newInitCmd())
 	return cmd
 }
 

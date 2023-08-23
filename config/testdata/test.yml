@@ -1,5 +1,6 @@
-deploy_target: src
-region: us-east-1
-custom_domain: ""
-s3_bucket_name: ""
-cors: []
+SpareTemplateVersion: 0.0.1
+DeployTarget: src
+Region: us-east-1
+CustomDomain: ""
+S3BucketName: ""
+CORS: []
