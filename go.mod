@@ -3,7 +3,7 @@ module github.com/nao1215/spare
 go 1.21.0
 
 require (
-	github.com/aws/aws-sdk-go v1.44.328
+	github.com/aws/aws-sdk-go v1.44.329
 	github.com/caarlos0/env/v9 v9.0.0
 	github.com/fatih/color v1.15.0
 	github.com/google/go-cmp v0.5.9
