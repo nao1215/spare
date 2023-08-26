@@ -80,19 +80,19 @@ func TestRegionValidate(t *testing.T) {
 func TestBucketValid(t *testing.T) {
 	t.Parallel()
 	tests := []struct {
-		name string
-		b    BucketName
-		want bool
+		name    string
+		b       BucketName
+		wantErr error
 	}{
 		{
-			name: "success",
-			b:    BucketName("spare"),
-			want: true,
+			name:    "success",
+			b:       BucketName("spare"),
+			wantErr: nil,
 		},
 		{
-			name: "failure. bucket name is empty",
-			b:    BucketName(""),
-			want: false,
+			name:    "failure. bucket name is empty",
+			b:       BucketName(""),
+			wantErr: ErrEmptyBucketName,
 		},
 	}
 	for _, tt := range tests {
@@ -100,8 +100,8 @@ func TestBucketValid(t *testing.T) {
 
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
-			if err := tt.b.Validate(); (err != nil) != tt.want {
-				t.Errorf("Bucket.Validate() error = %v, wantErr %v", err, tt.want)
+			if err := tt.b.Validate(); !errors.Is(err, tt.wantErr) {
+				t.Errorf("Bucket.Validate() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
 	}
