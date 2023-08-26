@@ -11,21 +11,18 @@ import (
 // ConfigFilePath is the path of the configuration file.
 const ConfigFilePath string = ".spare.yml"
 
-// SpareTemplateVersion is the version of the template.
-const SpareTemplateVersion string = "0.0.1"
-
 // Config is a struct that corresponds to the configuration file ".spare.yml".
 type Config struct {
-	SpareTemplateVersion string `yaml:"spareTemplateVersion"`
+	SpareTemplateVersion TemplateVersion `yaml:"spareTemplateVersion"`
 	// DeployTarget is the path of the deploy target (it's SPA).
-	DeployTarget string `yaml:"deployTarget"`
+	DeployTarget DeployTarget `yaml:"deployTarget"`
 	// Region is AWS region.
 	Region model.Region `yaml:"region"`
 	// CustomDomain is the domain name of the CloudFront.
 	// If you do not specify this, the CloudFront default domain name is used.
 	CustomDomain model.Domain `yaml:"customDomain"`
 	// S3BucketName is the name of the S3 bucket.
-	S3BucketName string `yaml:"s3BucketName"`
+	S3BucketName model.BucketName `yaml:"s3BucketName"`
 	// CORS is the list of CORS configuration.
 	CORS []model.Domain `yaml:"cors"`
 	// TODO: WAF, HTTPS, Cache
@@ -34,7 +31,7 @@ type Config struct {
 // NewConfig returns a new Config.
 func NewConfig() *Config {
 	return &Config{
-		SpareTemplateVersion: SpareTemplateVersion,
+		SpareTemplateVersion: CurrentSpareTemplateVersion,
 		DeployTarget:         "src",
 		Region:               model.RegionUSEast1,
 		CustomDomain:         "",
@@ -58,4 +55,20 @@ func (c *Config) Write(w io.Writer) (err error) {
 func (c *Config) Read(r io.Reader) (err error) {
 	decoder := yaml.NewDecoder(r)
 	return decoder.Decode(c)
+}
+
+// Validate validates the Config.
+func (c *Config) Validate() error {
+	validators := []Validator{
+		c.SpareTemplateVersion,
+		c.DeployTarget,
+		c.Region,
+		c.S3BucketName,
+	}
+	for _, v := range validators {
+		if err := v.Validate(); err != nil {
+			return err
+		}
+	}
+	return nil
 }
