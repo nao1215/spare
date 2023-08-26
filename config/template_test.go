@@ -17,7 +17,9 @@ func TestTemplateVersionString(t *testing.T) {
 		},
 	}
 	for _, tt := range tests {
+		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
 			if got := tt.tr.String(); got != tt.want {
 				t.Errorf("TemplateVersion.String() = %v, want %v", got, tt.want)
 			}

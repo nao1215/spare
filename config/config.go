@@ -23,8 +23,8 @@ type Config struct {
 	CustomDomain model.Domain `yaml:"customDomain"`
 	// S3BucketName is the name of the S3 bucket.
 	S3BucketName model.BucketName `yaml:"s3BucketName"`
-	// CORS is the list of CORS configuration.
-	CORS []model.Domain `yaml:"cors"`
+	// AllowOrigins is the list of domains that are allowed to access the SPA.
+	AllowOrigins model.AllowOrigins `yaml:"allowOrigins"`
 	// TODO: WAF, HTTPS, Cache
 }
 
@@ -36,7 +36,7 @@ func NewConfig() *Config {
 		Region:               model.RegionUSEast1,
 		CustomDomain:         "",
 		S3BucketName:         "",
-		CORS:                 []model.Domain{},
+		AllowOrigins:         model.AllowOrigins{},
 	}
 }
 
@@ -63,7 +63,9 @@ func (c *Config) Validate() error {
 		c.SpareTemplateVersion,
 		c.DeployTarget,
 		c.Region,
+		c.CustomDomain,
 		c.S3BucketName,
+		c.AllowOrigins,
 	}
 	for _, v := range validators {
 		if err := v.Validate(); err != nil {

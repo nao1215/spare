@@ -3,4 +3,4 @@ deployTarget: test-src
 region: us-east-2
 customDomain: "example.com"
 s3BucketName: "test-bucket"
-cors: ["example.com", "test.example.com"]
+allowOrigins: ["example.com", "test.example.com"]
