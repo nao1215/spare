@@ -6,6 +6,8 @@ import (
 )
 
 func TestWrap(t *testing.T) {
+	t.Parallel()
+
 	type args struct {
 		e   error
 		msg string
@@ -40,8 +42,12 @@ func TestWrap(t *testing.T) {
 			wantErrMsg: "this is return value",
 		},
 	}
+
 	for _, tt := range tests {
+		tt := tt
+
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
 			got := Wrap(tt.args.e, tt.args.msg)
 			if got == nil {
 				t.Fatal("expect return error, however errfmt.Wrap() return nil")
