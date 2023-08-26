@@ -54,7 +54,7 @@ func (c *Config) Write(w io.Writer) (err error) {
 	return encoder.Encode(c)
 }
 
-// ここにConfigをダンプしたファイルの内容を読むコードを書く
+// Read reads the Config from the io.Reader.
 func (c *Config) Read(r io.Reader) (err error) {
 	decoder := yaml.NewDecoder(r)
 	return decoder.Decode(c)
