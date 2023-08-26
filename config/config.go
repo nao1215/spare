@@ -59,7 +59,7 @@ func (c *Config) Read(r io.Reader) (err error) {
 
 // Validate validates the Config.
 func (c *Config) Validate() error {
-	validators := []Validator{
+	validators := []model.Validator{
 		c.SpareTemplateVersion,
 		c.DeployTarget,
 		c.Region,

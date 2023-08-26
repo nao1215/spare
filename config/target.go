@@ -16,5 +16,6 @@ func (d DeployTarget) Validate() error {
 	if d == "" {
 		return errfmt.Wrap(ErrInvalidDeployTarget, "DeployTarget is empty")
 	}
+	// TODO: check if the path exists
 	return nil
 }
