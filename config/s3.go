@@ -9,7 +9,7 @@ import (
 // S3 is a struct that contains the settings for the S3 storage.
 type S3 struct {
 	// Bucket is the name of the S3 bucket.
-	Bucket model.Bucket `env:"spare_BUCKET"`
+	Bucket model.BucketName `env:"spare_BUCKET"`
 	// Region is the name of the AWS region.
 	Region model.Region `env:"spare_REGION" envDefault:"us-east-1"`
 }

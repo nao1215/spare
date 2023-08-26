@@ -57,8 +57,8 @@ const (
 	RegionUSGovWest1 Region = "us-gov-west-1"
 )
 
-// Valid returns true if the Region exists.
-func (r Region) Valid() bool {
+// Validate returns true if the Region exists.
+func (r Region) Validate() error {
 	switch r {
 	case
 		RegionUSEast1, RegionUSEast2, RegionUSWest1, RegionUSWest2, RegionAFSouth1,
@@ -67,9 +67,11 @@ func (r Region) Valid() bool {
 		RegionCNNorth1, RegionCNNorthwest1, RegionEUCentral1, RegionEUNorth1,
 		RegionEUSouth1, RegionEUWest1, RegionEUWest2, RegionEUWest3, RegionMESouth1,
 		RegionSASouth1, RegionUSGovEast1, RegionUSGovWest1:
-		return true
+		return nil
+	case Region(""):
+		return ErrEmptyRegion
 	default:
-		return false
+		return ErrInvalidRegion
 	}
 }
 
@@ -78,15 +80,18 @@ func (r Region) String() string {
 	return string(r)
 }
 
-// Bucket is the name of the S3 bucket.
-type Bucket string
+// BucketName is the name of the S3 bucket.
+type BucketName string
 
-// Valid returns true if the Bucket is valid (it's not empty).
-func (b Bucket) Valid() bool {
-	return b != ""
+// Validate returns true if the Bucket is valid (it's not empty).
+func (b BucketName) Validate() error {
+	if b == "" {
+		return ErrEmptyBucketName
+	}
+	return nil
 }
 
 // String returns the string representation of the Bucket.
-func (b Bucket) String() string {
+func (b BucketName) String() string {
 	return string(b)
 }
