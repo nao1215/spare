@@ -1,5 +1,6 @@
 [![LinuxUnitTest](https://github.com/nao1215/spare/actions/workflows/linux_test.yml/badge.svg)](https://github.com/nao1215/spare/actions/workflows/linux_test.yml)
 [![MacUnitTest](https://github.com/nao1215/spare/actions/workflows/mac_test.yml/badge.svg)](https://github.com/nao1215/spare/actions/workflows/mac_test.yml)
+[![WindowsUnitTest](https://github.com/nao1215/spare/actions/workflows/windows_test.yml/badge.svg)](https://github.com/nao1215/spare/actions/workflows/windows_test.yml)
 [![reviewdog](https://github.com/nao1215/spare/actions/workflows/reviewdog.yml/badge.svg)](https://github.com/nao1215/spare/actions/workflows/reviewdog.yml)
 [![Run Gosec](https://github.com/nao1215/spare/actions/workflows/security.yml/badge.svg)](https://github.com/nao1215/spare/actions/workflows/security.yml)
 ![Coverage](https://raw.githubusercontent.com/nao1215/octocovs-central-repo/main/badges/nao1215/spare/coverage.svg)
