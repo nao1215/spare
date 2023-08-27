@@ -150,7 +150,7 @@ func TestEndpointString(t *testing.T) {
 	}{
 		{
 			name: "success",
-			e:    Endpoint(exampleCom),
+			e:    Endpoint(exampleComWithProtocol),
 			want: exampleComWithProtocol,
 		},
 	}
@@ -186,6 +186,11 @@ func TestEndpointValidate(t *testing.T) {
 		{
 			name:    "failure. endpoint is empty",
 			e:       "",
+			wantErr: true,
+		},
+		{
+			name:    "failure. include Ctrl character",
+			e:       "\x00",
 			wantErr: true,
 		},
 	}
