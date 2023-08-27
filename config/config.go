@@ -2,9 +2,12 @@ package config
 
 import (
 	"errors"
+	"fmt"
 	"io"
 
 	"github.com/nao1215/spare/app/domain/model"
+	"github.com/nao1215/spare/rand"
+	"github.com/nao1215/spare/version"
 	"gopkg.in/yaml.v2"
 )
 
@@ -31,7 +34,7 @@ type Config struct {
 
 // NewConfig returns a new Config.
 func NewConfig() *Config {
-	return &Config{
+	cfg := &Config{
 		SpareTemplateVersion:    CurrentSpareTemplateVersion,
 		DeployTarget:            "src",
 		Region:                  model.RegionUSEast1,
@@ -40,6 +43,15 @@ func NewConfig() *Config {
 		AllowOrigins:            model.AllowOrigins{},
 		DebugLocalstackEndpoint: model.DebugLocalstackEndpoint,
 	}
+	cfg.S3BucketName = cfg.DefaultS3BucketName()
+	return cfg
+}
+
+// DefaultS3BucketName returns the default S3 bucket name.
+func (c *Config) DefaultS3BucketName() model.BucketName {
+	return model.BucketName(
+		fmt.Sprintf("%s-%s-%s",
+			version.Name, c.Region, rand.RandomLowerAlphanumericStr(15)))
 }
 
 // Write writes the Config to the io.Writer.

@@ -26,6 +26,7 @@ func TestConfigWrite(t *testing.T) {
 		t.Parallel()
 
 		c := NewConfig()
+		c.S3BucketName = "" // to ignore random string
 		testFile := filepath.Join("testdata", "test.yml")
 		if runtime.GOOS == "windows" {
 			testFile = filepath.Join("testdata", "test_windows.yml")
