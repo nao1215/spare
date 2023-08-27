@@ -49,9 +49,10 @@ func NewConfig() *Config {
 
 // DefaultS3BucketName returns the default S3 bucket name.
 func (c *Config) DefaultS3BucketName() model.BucketName {
+	const randomStrLen = 15
 	return model.BucketName(
 		fmt.Sprintf("%s-%s-%s",
-			version.Name, c.Region, rand.RandomLowerAlphanumericStr(15)))
+			version.Name, c.Region, rand.RandomLowerAlphanumericStr(randomStrLen)))
 }
 
 // Write writes the Config to the io.Writer.

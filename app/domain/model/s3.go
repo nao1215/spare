@@ -102,11 +102,10 @@ func (b BucketName) Empty() bool {
 }
 
 // Validate returns true if the Bucket is valid.
-// If the Bucket is empty, it returns nil. The default S3 bucket name will be used.
 // Bucket naming rules: https://docs.aws.amazon.com/AmazonS3/latest/userguide/bucketnamingrules.html
 func (b BucketName) Validate() error {
 	if b.Empty() {
-		return nil
+		return errfmt.Wrap(ErrInvalidBucketName, "s3 bucket name is empty")
 	}
 
 	validators := []func() error{
@@ -132,7 +131,7 @@ func (b BucketName) validateLength() error {
 	return nil
 }
 
-var pattern *regexp.Regexp
+var pattern *regexp.Regexp //nolint:gochecknoglobals
 
 // validatePattern validates the pattern of the bucket name.
 func (b BucketName) validatePattern() error {

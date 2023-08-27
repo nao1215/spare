@@ -311,9 +311,9 @@ func TestBucketNameValidate(t *testing.T) {
 			wantErr: false,
 		},
 		{
-			name:    "success. bucket name is empty",
+			name:    "failure. bucket name is empty",
 			b:       BucketName(""),
-			wantErr: false,
+			wantErr: true,
 		},
 	}
 	for _, tt := range tests {
