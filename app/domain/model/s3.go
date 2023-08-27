@@ -1,6 +1,14 @@
 // Package model contains the definitions of domain models and business logic.
 package model
 
+import (
+	"fmt"
+	"regexp"
+	"strings"
+
+	"github.com/nao1215/spare/errfmt"
+)
+
 // Region is the name of the AWS region.
 type Region string
 
@@ -83,15 +91,94 @@ func (r Region) String() string {
 // BucketName is the name of the S3 bucket.
 type BucketName string
 
-// Validate returns true if the Bucket is valid (it's not empty).
+// String returns the string representation of the Bucket.
+func (b BucketName) String() string {
+	return string(b)
+}
+
+// Empty is whether bucket name is empty
+func (b BucketName) Empty() bool {
+	return b == ""
+}
+
+// Validate returns true if the Bucket is valid.
+// If the Bucket is empty, it returns nil. The default S3 bucket name will be used.
+// Bucket naming rules: https://docs.aws.amazon.com/AmazonS3/latest/userguide/bucketnamingrules.html
 func (b BucketName) Validate() error {
-	if b == "" {
-		return ErrEmptyBucketName
+	if b.Empty() {
+		return nil
+	}
+
+	validators := []func() error{
+		b.validateLength,
+		b.validatePattern,
+		b.validatePrefix,
+		b.validateSuffix,
+		b.validateCharSequence,
+	}
+	for _, v := range validators {
+		if err := v(); err != nil {
+			return err
+		}
 	}
 	return nil
 }
 
-// String returns the string representation of the Bucket.
-func (b BucketName) String() string {
-	return string(b)
+// validateLength validates the length of the bucket name.
+func (b BucketName) validateLength() error {
+	if len(b) < 3 || len(b) > 63 {
+		return fmt.Errorf("s3 bucket name must be between 3 and 63 characters long")
+	}
+	return nil
+}
+
+var pattern *regexp.Regexp
+
+// validatePattern validates the pattern of the bucket name.
+func (b BucketName) validatePattern() error {
+	if pattern == nil {
+		compilePattern := func() (*regexp.Regexp, error) {
+			patternStr := `^[a-z0-9][a-z0-9.-]*[a-z0-9]$`
+			return regexp.Compile(patternStr)
+		}
+
+		var err error
+		if pattern, err = compilePattern(); err != nil {
+			return errfmt.Wrap(ErrInvalidBucketName, err.Error())
+		}
+	}
+
+	match := pattern.MatchString(string(b))
+	if !match {
+		return errfmt.Wrap(ErrInvalidBucketName, "s3 bucket name must use only lowercase letters, numbers, periods, and hyphens")
+	}
+	return nil
+}
+
+// validatePrefix validates the prefix of the bucket name.
+func (b BucketName) validatePrefix() error {
+	for _, prefix := range []string{"xn--", "sthree-", "sthree-configurator"} {
+		if strings.HasPrefix(string(b), prefix) {
+			return errfmt.Wrap(ErrInvalidBucketName, "s3 bucket name must not start with \"xn--\", \"sthree-\", or \"sthree-configurator\"")
+		}
+	}
+	return nil
+}
+
+// validateSuffix validates the suffix of the bucket name.
+func (b BucketName) validateSuffix() error {
+	for _, suffix := range []string{"-s3alias", "--ol-s3"} {
+		if strings.HasSuffix(string(b), suffix) {
+			return errfmt.Wrap(ErrInvalidBucketName, "s3 bucket name must not end with \"-s3alias\" or \"--ol-s3\"")
+		}
+	}
+	return nil
+}
+
+// validateCharSequence validates the character sequence of the bucket name.
+func (b BucketName) validateCharSequence() error {
+	if strings.Contains(string(b), "..") || strings.Contains(string(b), "--") {
+		return errfmt.Wrap(ErrInvalidBucketName, "s3 bucket name must not contain consecutive periods or hyphens")
+	}
+	return nil
 }

@@ -18,12 +18,10 @@ func (d Domain) String() string {
 }
 
 // Validate validates Domain. If Domain is invalid, it returns an error.
+// If domain is empty, it returns nil and the default CloudFront domain will be used.
 func (d Domain) Validate() error {
-	if d == "" {
-		return errfmt.Wrap(ErrInvalidDomain, "domain is empty")
-	}
 	for _, part := range strings.Split(d.String(), ".") {
-		if len(part) == 0 || !isAlphaNumeric(part) {
+		if !isAlphaNumeric(part) {
 			return errfmt.Wrap(ErrInvalidDomain, fmt.Sprintf("domain %s is invalid", d))
 		}
 	}
@@ -38,6 +36,11 @@ func isAlphaNumeric(s string) bool {
 		}
 	}
 	return true
+}
+
+// Empty is whether domain is empty
+func (d Domain) Empty() bool {
+	return d == ""
 }
 
 // AllowOrigins is list of origins (domain names) that CloudFront can use as

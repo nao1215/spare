@@ -56,9 +56,9 @@ func TestDomainValidate(t *testing.T) {
 			wantErr: ErrInvalidDomain,
 		},
 		{
-			name:    "failure. domain is empty",
+			name:    "success. domain is empty",
 			d:       "",
-			wantErr: ErrInvalidDomain,
+			wantErr: nil,
 		},
 	}
 	for _, tt := range tests {
@@ -67,6 +67,35 @@ func TestDomainValidate(t *testing.T) {
 			t.Parallel()
 			if err := tt.d.Validate(); !errors.Is(err, tt.wantErr) {
 				t.Errorf("Domain.Validate() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
+
+func TestDomainEmpty(t *testing.T) {
+	t.Parallel()
+	tests := []struct {
+		name string
+		d    Domain
+		want bool
+	}{
+		{
+			name: "success",
+			d:    exampleCom,
+			want: false,
+		},
+		{
+			name: "failure",
+			d:    "",
+			want: true,
+		},
+	}
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			if got := tt.d.Empty(); got != tt.want {
+				t.Errorf("Domain.Empty() = %v, want %v", got, tt.want)
 			}
 		})
 	}
@@ -119,9 +148,9 @@ func TestAllowOriginsValidate(t *testing.T) {
 			wantErr: false,
 		},
 		{
-			name:    "failure. origin is empty",
+			name:    "success. include empty string",
 			a:       AllowOrigins{exampleCom, ""},
-			wantErr: true,
+			wantErr: false,
 		},
 		{
 			name:    "failure. origin is invalid",
