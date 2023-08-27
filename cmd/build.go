@@ -1,6 +1,13 @@
 package cmd
 
 import (
+	"errors"
+	"fmt"
+	"os"
+
+	"github.com/AlecAivazis/survey/v2"
+	"github.com/charmbracelet/log"
+	"github.com/nao1215/spare/config"
 	"github.com/nao1215/spare/errfmt"
 	"github.com/spf13/cobra"
 )
@@ -35,6 +42,55 @@ func (b *builder) Parse(cmd *cobra.Command, _ []string) (err error) {
 // Do generate .spare.yml at current directory.
 // If .spare.yml already exists, return error.
 func (b *builder) Do() error {
+	log.Info("spare", "debug mode", b.debug)
+	log.Info("validate setting fron .spare.yml")
+	cfg, err := b.readConfig()
+	if err != nil {
+		return err
+	}
 
+	if cfg.Validate(b.debug); err != nil {
+		return err
+	}
+	log.Info("setting is valid")
+
+	if err := b.confirm(cfg); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// readConfig reads .spare.yml and returns config.Config.
+func (b *builder) readConfig() (*config.Config, error) {
+	file, err := os.Open(config.ConfigFilePath)
+	if err != nil {
+		return nil, err
+	}
+	defer func() {
+		if closeErr := file.Close(); closeErr != nil {
+			err = errors.Join(err, closeErr)
+		}
+	}()
+
+	cfg := config.NewConfig()
+	cfg.Read(file)
+	return cfg, nil
+}
+
+func (b *builder) confirm(cfg *config.Config) error {
+	fmt.Println("== .spare.yml ===================================")
+	cfg.Write(os.Stdout)
+	fmt.Println("=================================================")
+
+	var result bool
+	if err := survey.AskOne(
+		&survey.Confirm{
+			Message: "want to build AWS infrastructure with the above settings?",
+		},
+		&result,
+	); err != nil {
+		return err
+	}
 	return nil
 }

@@ -4,6 +4,7 @@ package external
 import (
 	"bytes"
 	"context"
+	"errors"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awserr"
@@ -114,7 +115,8 @@ func (s *S3BucketCreator) CreateBucket(_ context.Context, input *service.BucketC
 		Bucket:                    aws.String(input.Bucket.String()),
 		CreateBucketConfiguration: createBucketConfig,
 	}); err != nil {
-		if awsErr, ok := err.(awserr.Error); ok {
+		var awsErr awserr.Error
+		if errors.As(err, &awsErr) {
 			switch awsErr.Code() {
 			case s3.ErrCodeBucketAlreadyExists:
 				return nil, service.ErrBucketAlreadyExistsOwnedByOther
