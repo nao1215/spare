@@ -58,6 +58,10 @@ func (b *builder) Do() error {
 		return err
 	}
 
+	log.Info("start building AWS infrastructure")
+	log.Info("create S3 bucket")
+	// TODO: create S3 bucket and unit test
+
 	return nil
 }
 
