@@ -5,10 +5,15 @@ import (
 	"testing"
 )
 
+const (
+	exampleCom             = "example.com"
+	exampleNet             = "example.net"
+	exampleComWithProtocol = "https://example.com"
+)
+
 func TestDomainString(t *testing.T) {
 	t.Parallel()
 
-	const exampleCom = "example.com"
 	tests := []struct {
 		name string
 		d    Domain
@@ -42,12 +47,12 @@ func TestDomainValidate(t *testing.T) {
 	}{
 		{
 			name:    "success",
-			d:       "example.com",
+			d:       exampleCom,
 			wantErr: nil,
 		},
 		{
 			name:    "failure. protocol is included",
-			d:       "https://example.com",
+			d:       exampleComWithProtocol,
 			wantErr: ErrInvalidDomain,
 		},
 		{
@@ -110,17 +115,17 @@ func TestAllowOriginsValidate(t *testing.T) {
 	}{
 		{
 			name:    "success",
-			a:       AllowOrigins{"example.com", "example.net"},
+			a:       AllowOrigins{exampleCom, exampleNet},
 			wantErr: false,
 		},
 		{
 			name:    "failure. origin is empty",
-			a:       AllowOrigins{"example.com", ""},
+			a:       AllowOrigins{exampleCom, ""},
 			wantErr: true,
 		},
 		{
 			name:    "failure. origin is invalid",
-			a:       AllowOrigins{"example.com", "https://example.com"},
+			a:       AllowOrigins{exampleCom, exampleComWithProtocol},
 			wantErr: true,
 		},
 	}
@@ -145,8 +150,8 @@ func TestEndpointString(t *testing.T) {
 	}{
 		{
 			name: "success",
-			e:    "http://example.com",
-			want: "http://example.com",
+			e:    Endpoint(exampleCom),
+			want: exampleComWithProtocol,
 		},
 	}
 	for _, tt := range tests {
@@ -170,12 +175,12 @@ func TestEndpointValidate(t *testing.T) {
 	}{
 		{
 			name:    "success",
-			e:       "http://example.com",
+			e:       Endpoint(exampleComWithProtocol),
 			wantErr: false,
 		},
 		{
 			name:    "failure. protocol is not included",
-			e:       "example.com",
+			e:       exampleCom,
 			wantErr: true,
 		},
 		{

@@ -12,6 +12,13 @@ import (
 	"github.com/nao1215/spare/app/domain/model"
 )
 
+const (
+	exampleCom                  = "example.com"
+	exampleComWithTestSubDomain = "test.example.com"
+	exampleComWithProtocol      = "https://example.com"
+	testBucketName              = "test-bucket"
+)
+
 func TestConfigWrite(t *testing.T) {
 	t.Parallel()
 
@@ -65,10 +72,10 @@ func TestConfigRead(t *testing.T) {
 			SpareTemplateVersion:    "1.0.0",
 			DeployTarget:            "test-src",
 			Region:                  model.RegionUSEast2,
-			CustomDomain:            "example.com",
-			S3BucketName:            "test-bucket",
-			AllowOrigins:            model.AllowOrigins{"example.com", "test.example.com"},
-			DebugLocalstackEndpoint: "http://localhost:4566",
+			CustomDomain:            exampleCom,
+			S3BucketName:            testBucketName,
+			AllowOrigins:            model.AllowOrigins{exampleCom, exampleComWithTestSubDomain},
+			DebugLocalstackEndpoint: model.DebugLocalstackEndpoint,
 		}
 
 		if diff := cmp.Diff(want, got); diff != "" {
@@ -99,10 +106,10 @@ func TestConfigValidate(t *testing.T) {
 				SpareTemplateVersion: "1.0.0",
 				DeployTarget:         "src",
 				Region:               model.RegionUSEast1,
-				CustomDomain:         "example.com",
-				S3BucketName:         "test-bucket",
-				AllowOrigins:         model.AllowOrigins{"example.com", "test.example.com"},
-				Endpoint:             "http://localhost:4566",
+				CustomDomain:         exampleCom,
+				S3BucketName:         testBucketName,
+				AllowOrigins:         model.AllowOrigins{exampleCom, exampleComWithTestSubDomain},
+				Endpoint:             model.DebugLocalstackEndpoint,
 			},
 			wantErr: false,
 		},
@@ -112,10 +119,10 @@ func TestConfigValidate(t *testing.T) {
 				SpareTemplateVersion: "",
 				DeployTarget:         "src",
 				Region:               model.RegionUSEast1,
-				CustomDomain:         "example.com",
-				S3BucketName:         "test-bucket",
-				AllowOrigins:         model.AllowOrigins{"example.com", "test.example.com"},
-				Endpoint:             "http://localhost:4566",
+				CustomDomain:         exampleCom,
+				S3BucketName:         testBucketName,
+				AllowOrigins:         model.AllowOrigins{exampleCom, exampleComWithTestSubDomain},
+				Endpoint:             model.DebugLocalstackEndpoint,
 			},
 			wantErr: true,
 		},

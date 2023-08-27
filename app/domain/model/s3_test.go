@@ -16,7 +16,7 @@ func TestRegionString(t *testing.T) {
 	}{
 		{
 			name: "success",
-			r:    Region("ap-northeast-1"),
+			r:    RegionAPNortheast1,
 			want: "ap-northeast-1",
 		},
 	}
@@ -42,7 +42,7 @@ func TestRegionValidate(t *testing.T) {
 	}{
 		{
 			name:    "success",
-			r:       Region("ap-northeast-1"),
+			r:       RegionAPNortheast1,
 			wantErr: false,
 			e:       nil,
 		},
