@@ -60,7 +60,8 @@ func (c *Config) Read(r io.Reader) (err error) {
 }
 
 // Validate validates the Config.
-func (c *Config) Validate() error {
+// If debugMode is true, it validates the DebugLocalstackEndpoint.
+func (c *Config) Validate(debugMode bool) error {
 	validators := []model.Validator{
 		c.SpareTemplateVersion,
 		c.DeployTarget,
@@ -69,6 +70,10 @@ func (c *Config) Validate() error {
 		c.S3BucketName,
 		c.AllowOrigins,
 	}
+	if debugMode {
+		validators = append(validators, c.DebugLocalstackEndpoint)
+	}
+
 	for _, v := range validators {
 		if err := v.Validate(); err != nil {
 			return err

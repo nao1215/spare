@@ -11,4 +11,6 @@ var (
 	ErrEmptyBucketName = errors.New("bucket name is empty")
 	// ErrInvalidDomain is an error that occurs when the domain is invalid.
 	ErrInvalidDomain = errors.New("invalid domain")
+	// ErrInvalidEndpoint is an error that occurs when the endpoint is invalid.
+	ErrInvalidEndpoint = errors.New("invalid endpoint")
 )

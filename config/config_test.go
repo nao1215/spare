@@ -86,6 +86,7 @@ func TestConfigValidate(t *testing.T) {
 		CustomDomain         model.Domain
 		S3BucketName         model.BucketName
 		AllowOrigins         model.AllowOrigins
+		Endpoint             model.Endpoint
 	}
 	tests := []struct {
 		name    string
@@ -101,6 +102,7 @@ func TestConfigValidate(t *testing.T) {
 				CustomDomain:         "example.com",
 				S3BucketName:         "test-bucket",
 				AllowOrigins:         model.AllowOrigins{"example.com", "test.example.com"},
+				Endpoint:             "http://localhost:4566",
 			},
 			wantErr: false,
 		},
@@ -113,6 +115,7 @@ func TestConfigValidate(t *testing.T) {
 				CustomDomain:         "example.com",
 				S3BucketName:         "test-bucket",
 				AllowOrigins:         model.AllowOrigins{"example.com", "test.example.com"},
+				Endpoint:             "http://localhost:4566",
 			},
 			wantErr: true,
 		},
@@ -122,14 +125,15 @@ func TestConfigValidate(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			c := &Config{
-				SpareTemplateVersion: tt.fields.SpareTemplateVersion,
-				DeployTarget:         tt.fields.DeployTarget,
-				Region:               tt.fields.Region,
-				CustomDomain:         tt.fields.CustomDomain,
-				S3BucketName:         tt.fields.S3BucketName,
-				AllowOrigins:         tt.fields.AllowOrigins,
+				SpareTemplateVersion:    tt.fields.SpareTemplateVersion,
+				DeployTarget:            tt.fields.DeployTarget,
+				Region:                  tt.fields.Region,
+				CustomDomain:            tt.fields.CustomDomain,
+				S3BucketName:            tt.fields.S3BucketName,
+				AllowOrigins:            tt.fields.AllowOrigins,
+				DebugLocalstackEndpoint: tt.fields.Endpoint,
 			}
-			if err := c.Validate(); (err != nil) != tt.wantErr {
+			if err := c.Validate(false); (err != nil) != tt.wantErr {
 				t.Errorf("Config.Validate() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})

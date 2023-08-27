@@ -3,6 +3,7 @@ package model
 import (
 	"errors"
 	"fmt"
+	"net/url"
 	"strings"
 
 	"github.com/nao1215/spare/errfmt"
@@ -59,6 +60,23 @@ type Endpoint string
 // String returns the string representation of Endpoint.
 func (e Endpoint) String() string {
 	return string(e)
+}
+
+// Validate validates Endpoint. If Endpoint is invalid, it returns an error.
+func (e Endpoint) Validate() error {
+	if e == "" {
+		return errfmt.Wrap(ErrInvalidEndpoint, "endpoint is empty")
+	}
+
+	parsedURL, err := url.Parse(e.String())
+	if err != nil {
+		return errfmt.Wrap(ErrInvalidDomain, err.Error())
+	}
+	host := parsedURL.Host
+	if host == "" || parsedURL.Scheme == "" {
+		return errfmt.Wrap(ErrInvalidDomain, host)
+	}
+	return nil
 }
 
 // DebugLocalstackEndpoint is the endpoint for localstack. It's used for testing.

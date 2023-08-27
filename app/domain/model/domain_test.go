@@ -159,3 +159,38 @@ func TestEndpointString(t *testing.T) {
 		})
 	}
 }
+
+func TestEndpointValidate(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		name    string
+		e       Endpoint
+		wantErr bool
+	}{
+		{
+			name:    "success",
+			e:       "http://example.com",
+			wantErr: false,
+		},
+		{
+			name:    "failure. protocol is not included",
+			e:       "example.com",
+			wantErr: true,
+		},
+		{
+			name:    "failure. endpoint is empty",
+			e:       "",
+			wantErr: true,
+		},
+	}
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			if err := tt.e.Validate(); (err != nil) != tt.wantErr {
+				t.Errorf("Endpoint.Validate() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
