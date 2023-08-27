@@ -2,9 +2,12 @@ package config
 
 import (
 	"errors"
+	"fmt"
 	"io"
 
 	"github.com/nao1215/spare/app/domain/model"
+	"github.com/nao1215/spare/rand"
+	"github.com/nao1215/spare/version"
 	"gopkg.in/yaml.v2"
 )
 
@@ -24,20 +27,32 @@ type Config struct {
 	// S3BucketName is the name of the S3 bucket.
 	S3BucketName model.BucketName `yaml:"s3BucketName"`
 	// AllowOrigins is the list of domains that are allowed to access the SPA.
-	AllowOrigins model.AllowOrigins `yaml:"allowOrigins"`
+	AllowOrigins            model.AllowOrigins `yaml:"allowOrigins"`
+	DebugLocalstackEndpoint model.Endpoint     `yaml:"debugLocalstackEndpoint"`
 	// TODO: WAF, HTTPS, Cache
 }
 
 // NewConfig returns a new Config.
 func NewConfig() *Config {
-	return &Config{
-		SpareTemplateVersion: CurrentSpareTemplateVersion,
-		DeployTarget:         "src",
-		Region:               model.RegionUSEast1,
-		CustomDomain:         "",
-		S3BucketName:         "",
-		AllowOrigins:         model.AllowOrigins{},
+	cfg := &Config{
+		SpareTemplateVersion:    CurrentSpareTemplateVersion,
+		DeployTarget:            "src",
+		Region:                  model.RegionUSEast1,
+		CustomDomain:            "",
+		S3BucketName:            "",
+		AllowOrigins:            model.AllowOrigins{},
+		DebugLocalstackEndpoint: model.DebugLocalstackEndpoint,
 	}
+	cfg.S3BucketName = cfg.DefaultS3BucketName()
+	return cfg
+}
+
+// DefaultS3BucketName returns the default S3 bucket name.
+func (c *Config) DefaultS3BucketName() model.BucketName {
+	const randomStrLen = 15
+	return model.BucketName(
+		fmt.Sprintf("%s-%s-%s",
+			version.Name, c.Region, rand.RandomLowerAlphanumericStr(randomStrLen)))
 }
 
 // Write writes the Config to the io.Writer.
@@ -58,7 +73,8 @@ func (c *Config) Read(r io.Reader) (err error) {
 }
 
 // Validate validates the Config.
-func (c *Config) Validate() error {
+// If debugMode is true, it validates the DebugLocalstackEndpoint.
+func (c *Config) Validate(debugMode bool) error {
 	validators := []model.Validator{
 		c.SpareTemplateVersion,
 		c.DeployTarget,
@@ -67,6 +83,10 @@ func (c *Config) Validate() error {
 		c.S3BucketName,
 		c.AllowOrigins,
 	}
+	if debugMode {
+		validators = append(validators, c.DebugLocalstackEndpoint)
+	}
+
 	for _, v := range validators {
 		if err := v.Validate(); err != nil {
 			return err

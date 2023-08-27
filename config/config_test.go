@@ -12,6 +12,13 @@ import (
 	"github.com/nao1215/spare/app/domain/model"
 )
 
+const (
+	exampleCom                  = "example.com"
+	exampleComWithTestSubDomain = "test.example.com"
+	exampleComWithProtocol      = "https://example.com"
+	testBucketName              = "test-bucket"
+)
+
 func TestConfigWrite(t *testing.T) {
 	t.Parallel()
 
@@ -19,6 +26,7 @@ func TestConfigWrite(t *testing.T) {
 		t.Parallel()
 
 		c := NewConfig()
+		c.S3BucketName = "" // to ignore random string
 		testFile := filepath.Join("testdata", "test.yml")
 		if runtime.GOOS == "windows" {
 			testFile = filepath.Join("testdata", "test_windows.yml")
@@ -62,12 +70,13 @@ func TestConfigRead(t *testing.T) {
 		}
 
 		want := &Config{
-			SpareTemplateVersion: "1.0.0",
-			DeployTarget:         "test-src",
-			Region:               model.RegionUSEast2,
-			CustomDomain:         "example.com",
-			S3BucketName:         "test-bucket",
-			AllowOrigins:         model.AllowOrigins{"example.com", "test.example.com"},
+			SpareTemplateVersion:    "1.0.0",
+			DeployTarget:            "test-src",
+			Region:                  model.RegionUSEast2,
+			CustomDomain:            exampleCom,
+			S3BucketName:            testBucketName,
+			AllowOrigins:            model.AllowOrigins{exampleCom, exampleComWithTestSubDomain},
+			DebugLocalstackEndpoint: model.DebugLocalstackEndpoint,
 		}
 
 		if diff := cmp.Diff(want, got); diff != "" {
@@ -85,6 +94,7 @@ func TestConfigValidate(t *testing.T) {
 		CustomDomain         model.Domain
 		S3BucketName         model.BucketName
 		AllowOrigins         model.AllowOrigins
+		Endpoint             model.Endpoint
 	}
 	tests := []struct {
 		name    string
@@ -97,9 +107,10 @@ func TestConfigValidate(t *testing.T) {
 				SpareTemplateVersion: "1.0.0",
 				DeployTarget:         "src",
 				Region:               model.RegionUSEast1,
-				CustomDomain:         "example.com",
-				S3BucketName:         "test-bucket",
-				AllowOrigins:         model.AllowOrigins{"example.com", "test.example.com"},
+				CustomDomain:         exampleCom,
+				S3BucketName:         testBucketName,
+				AllowOrigins:         model.AllowOrigins{exampleCom, exampleComWithTestSubDomain},
+				Endpoint:             model.DebugLocalstackEndpoint,
 			},
 			wantErr: false,
 		},
@@ -109,9 +120,10 @@ func TestConfigValidate(t *testing.T) {
 				SpareTemplateVersion: "",
 				DeployTarget:         "src",
 				Region:               model.RegionUSEast1,
-				CustomDomain:         "example.com",
-				S3BucketName:         "test-bucket",
-				AllowOrigins:         model.AllowOrigins{"example.com", "test.example.com"},
+				CustomDomain:         exampleCom,
+				S3BucketName:         testBucketName,
+				AllowOrigins:         model.AllowOrigins{exampleCom, exampleComWithTestSubDomain},
+				Endpoint:             model.DebugLocalstackEndpoint,
 			},
 			wantErr: true,
 		},
@@ -121,14 +133,15 @@ func TestConfigValidate(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			c := &Config{
-				SpareTemplateVersion: tt.fields.SpareTemplateVersion,
-				DeployTarget:         tt.fields.DeployTarget,
-				Region:               tt.fields.Region,
-				CustomDomain:         tt.fields.CustomDomain,
-				S3BucketName:         tt.fields.S3BucketName,
-				AllowOrigins:         tt.fields.AllowOrigins,
+				SpareTemplateVersion:    tt.fields.SpareTemplateVersion,
+				DeployTarget:            tt.fields.DeployTarget,
+				Region:                  tt.fields.Region,
+				CustomDomain:            tt.fields.CustomDomain,
+				S3BucketName:            tt.fields.S3BucketName,
+				AllowOrigins:            tt.fields.AllowOrigins,
+				DebugLocalstackEndpoint: tt.fields.Endpoint,
 			}
-			if err := c.Validate(); (err != nil) != tt.wantErr {
+			if err := c.Validate(false); (err != nil) != tt.wantErr {
 				t.Errorf("Config.Validate() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
