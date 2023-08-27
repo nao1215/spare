@@ -37,8 +37,9 @@ spareTemplateVersion: 0.0.1
 deployTarget: src
 region: us-east-1
 customDomain: ""
-s3BucketName: ""
+s3BucketName: spare-us-east-1-ukdzd41mdfch7e6
 allowOrigins: []
+debugLocalstackEndpoint: http://localhost:4566
 ```
 
 ### [WIP] edit subcommand
@@ -46,6 +47,28 @@ The 'edit' subcommand opens the .spare.yml file in the terminal. It displays exp
 
 ### [WIP] build subcommand
 The 'build' subcommand constructs the AWS infrastructure. As development progresses, the diagram of the infrastructure configuration to be built will be provided below.
+
+```bash
+$ spare build
+2023/08/27 23:18:59 INFO spare debug mode=false
+2023/08/27 23:18:59 INFO validate setting fron .spare.yml
+2023/08/27 23:18:59 INFO setting is valid
+== .spare.yml ===================================
+spareTemplateVersion: 0.0.1
+deployTarget: src
+region: us-east-1
+customDomain: ""
+s3BucketName: spare-us-east-1-ukdzd41mdfch7e6
+allowOrigins: []
+debugLocalstackEndpoint: http://localhost:4566
+=================================================
+? want to build AWS infrastructure with the above settings? Yes
+2023/08/27 23:19:02 INFO start building AWS infrastructure
+2023/08/27 23:19:02 INFO create S3 bucket
+ :
+ [WIP]
+ :
+```
 
 ### [WIP] deploy subcommand
 The 'deploy' subcommand uploads the built artifacts to the S3 bucket or ECR repository. It also clears the CloudFront cache.
