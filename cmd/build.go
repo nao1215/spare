@@ -49,7 +49,7 @@ func (b *builder) Do() error {
 		return err
 	}
 
-	if cfg.Validate(b.debug); err != nil {
+	if err := cfg.Validate(b.debug); err != nil {
 		return err
 	}
 	log.Info("setting is valid")
@@ -74,13 +74,17 @@ func (b *builder) readConfig() (*config.Config, error) {
 	}()
 
 	cfg := config.NewConfig()
-	cfg.Read(file)
+	if err := cfg.Read(file); err != nil {
+		return nil, err
+	}
 	return cfg, nil
 }
 
 func (b *builder) confirm(cfg *config.Config) error {
 	fmt.Println("== .spare.yml ===================================")
-	cfg.Write(os.Stdout)
+	if err := cfg.Write(os.Stdout); err != nil {
+		return err
+	}
 	fmt.Println("=================================================")
 
 	var result bool
