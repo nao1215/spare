@@ -15,7 +15,11 @@ import (
 func newRootCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "spare",
-		Short: "spare deploy single page application and aws infrastructure",
+		Short: "spare release single page application and aws infrastructure",
+		Long: `,___,
+[OvO] SPARE - Single Page Application Release Easily
+/)__)         https://github.com/nao1215/spare (MIT LICENSE)
+-"--"-`,
 	}
 	cmd.CompletionOptions.DisableDefaultCmd = true
 	cmd.SilenceUsage = true
