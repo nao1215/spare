@@ -6,6 +6,7 @@ import (
 	"context"
 
 	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/awserr"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
@@ -91,22 +92,38 @@ type S3BucketCreator struct {
 var _ service.BucketCreator = &S3BucketCreator{}
 
 // NewS3BucketCreator returns a new S3BucketCreator struct.
-func NewS3BucketCreator(region model.Region) *S3BucketCreator {
+func NewS3BucketCreator(region model.Region, endpoint *model.Endpoint) *S3BucketCreator {
 	session := session.Must(session.NewSessionWithOptions(session.Options{
 		Config: aws.Config{Region: aws.String(region.String())},
 	}))
+
+	if endpoint != nil {
+		session.Config.WithLogLevel(aws.LogDebugWithHTTPBody)
+		session.Config.Endpoint = aws.String(endpoint.String())
+		session.Config.DisableSSL = aws.Bool(true)
+	}
 	return &S3BucketCreator{s3.New(session)}
 }
 
 // CreateBucket creates a bucket on S3.
 func (s *S3BucketCreator) CreateBucket(_ context.Context, input *service.BucketCreatorInput) (*service.BucketCreatorOutput, error) {
-	createBucketCfg := &s3.CreateBucketConfiguration{}
-	createBucketCfg.SetLocationConstraint(input.Region.String())
+	createBucketConfig := &s3.CreateBucketConfiguration{}
+	createBucketConfig.SetLocationConstraint(input.Region.String())
 
 	if _, err := s.svc.CreateBucket(&s3.CreateBucketInput{
 		Bucket:                    aws.String(input.Bucket.String()),
-		CreateBucketConfiguration: createBucketCfg,
+		CreateBucketConfiguration: createBucketConfig,
 	}); err != nil {
+		if awsErr, ok := err.(awserr.Error); ok {
+			switch awsErr.Code() {
+			case s3.ErrCodeBucketAlreadyExists:
+				return nil, service.ErrBucketAlreadyExistsOwnedByOther
+			case s3.ErrCodeBucketAlreadyOwnedByYou:
+				return nil, service.ErrBucketAlreadyOwnedByYou
+			default:
+				return nil, err
+			}
+		}
 		return nil, err
 	}
 	return &service.BucketCreatorOutput{}, nil

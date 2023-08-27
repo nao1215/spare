@@ -52,3 +52,14 @@ func (a AllowOrigins) Validate() (err error) {
 	}
 	return err
 }
+
+// Endpoint is a type that represents an endpoint.
+type Endpoint string
+
+// String returns the string representation of Endpoint.
+func (e Endpoint) String() string {
+	return string(e)
+}
+
+// DebugLocalstackEndpoint is the endpoint for localstack. It's used for testing.
+const DebugLocalstackEndpoint = "http://localhost:4566"

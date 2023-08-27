@@ -1,8 +1,13 @@
 package config
 
-import "errors"
+import (
+	"errors"
+	"fmt"
+)
 
 var (
+	// ErrConfigFileAlreadyExists is an error that occurs when the config file already exists.
+	ErrConfigFileAlreadyExists = fmt.Errorf("%s config file already exists", ConfigFilePath)
 	// ErrInvalidRegion is an error that occurs when the region is invalid.
 	ErrInvalidRegion = errors.New("invalid region")
 	// ErrInvalidBucket is an error that occurs when the bucket is invalid.

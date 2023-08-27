@@ -24,19 +24,21 @@ type Config struct {
 	// S3BucketName is the name of the S3 bucket.
 	S3BucketName model.BucketName `yaml:"s3BucketName"`
 	// AllowOrigins is the list of domains that are allowed to access the SPA.
-	AllowOrigins model.AllowOrigins `yaml:"allowOrigins"`
+	AllowOrigins            model.AllowOrigins `yaml:"allowOrigins"`
+	DebugLocalstackEndpoint model.Endpoint     `yaml:"debugLocalstackEndpoint"`
 	// TODO: WAF, HTTPS, Cache
 }
 
 // NewConfig returns a new Config.
 func NewConfig() *Config {
 	return &Config{
-		SpareTemplateVersion: CurrentSpareTemplateVersion,
-		DeployTarget:         "src",
-		Region:               model.RegionUSEast1,
-		CustomDomain:         "",
-		S3BucketName:         "",
-		AllowOrigins:         model.AllowOrigins{},
+		SpareTemplateVersion:    CurrentSpareTemplateVersion,
+		DeployTarget:            "src",
+		Region:                  model.RegionUSEast1,
+		CustomDomain:            "",
+		S3BucketName:            "",
+		AllowOrigins:            model.AllowOrigins{},
+		DebugLocalstackEndpoint: model.DebugLocalstackEndpoint,
 	}
 }
 

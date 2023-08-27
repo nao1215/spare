@@ -62,12 +62,13 @@ func TestConfigRead(t *testing.T) {
 		}
 
 		want := &Config{
-			SpareTemplateVersion: "1.0.0",
-			DeployTarget:         "test-src",
-			Region:               model.RegionUSEast2,
-			CustomDomain:         "example.com",
-			S3BucketName:         "test-bucket",
-			AllowOrigins:         model.AllowOrigins{"example.com", "test.example.com"},
+			SpareTemplateVersion:    "1.0.0",
+			DeployTarget:            "test-src",
+			Region:                  model.RegionUSEast2,
+			CustomDomain:            "example.com",
+			S3BucketName:            "test-bucket",
+			AllowOrigins:            model.AllowOrigins{"example.com", "test.example.com"},
+			DebugLocalstackEndpoint: "http://localhost:4566",
 		}
 
 		if diff := cmp.Diff(want, got); diff != "" {

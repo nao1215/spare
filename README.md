@@ -44,8 +44,8 @@ allowOrigins: []
 ### [WIP] edit subcommand
 The 'edit' subcommand opens the .spare.yml file in the terminal. It displays explanations for each parameter, allowing users to set values without confusion. Additionally, after setting values for parameters, it performs validation to prevent saving the configuration file with incorrect settings.
 
-### [WIP] create subcommand
-The 'create' subcommand constructs the AWS infrastructure. As development progresses, the diagram of the infrastructure configuration to be built will be provided below.
+### [WIP] build subcommand
+The 'build' subcommand constructs the AWS infrastructure. As development progresses, the diagram of the infrastructure configuration to be built will be provided below.
 
 ### [WIP] deploy subcommand
 The 'deploy' subcommand uploads the built artifacts to the S3 bucket or ECR repository. It also clears the CloudFront cache.

@@ -2,9 +2,7 @@
 package cmd
 
 import (
-	"fmt"
-
-	"github.com/fatih/color"
+	"github.com/charmbracelet/log"
 	"github.com/spf13/cobra"
 )
 
@@ -27,13 +25,14 @@ func newRootCmd() *cobra.Command {
 	cmd.AddCommand(newVersionCmd())
 	cmd.AddCommand(newBugReportCmd())
 	cmd.AddCommand(newInitCmd())
+	cmd.AddCommand(newBuildCmd())
 	return cmd
 }
 
 // Execute run process.
 func Execute() int {
 	if err := newRootCmd().Execute(); err != nil {
-		fmt.Printf("%s %s\n", color.RedString("[ERROR]"), err.Error())
+		log.Error(err)
 		return 1
 	}
 	return 0

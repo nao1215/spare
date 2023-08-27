@@ -4,3 +4,4 @@ region: us-east-2
 customDomain: "example.com"
 s3BucketName: "test-bucket"
 allowOrigins: ["example.com", "test.example.com"]
+debugLocalstackEndpoint: http://localhost:4566
