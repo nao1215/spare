@@ -17,7 +17,7 @@ type Regex struct {
 	Once sync.Once
 }
 
-// initOnce initializes the Regex object.
+// InitOnce initializes the Regex object.
 func (r *Regex) InitOnce(pattern string) {
 	r.Once.Do(func() {
 		r.Pattern = regexp.MustCompile(pattern)
