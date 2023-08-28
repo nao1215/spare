@@ -7,7 +7,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/nao1215/spare/errfmt"
+	"github.com/nao1215/spare/utils/errfmt"
 )
 
 // Region is the name of the AWS region.

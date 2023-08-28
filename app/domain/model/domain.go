@@ -6,7 +6,7 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/nao1215/spare/errfmt"
+	"github.com/nao1215/spare/utils/errfmt"
 )
 
 // Domain is a type that represents a domain name.
