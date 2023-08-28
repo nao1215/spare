@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"regexp"
 	"strings"
+	"sync"
 
 	"github.com/nao1215/spare/errfmt"
 )
@@ -135,17 +136,11 @@ var pattern *regexp.Regexp //nolint:gochecknoglobals
 
 // validatePattern validates the pattern of the bucket name.
 func (b BucketName) validatePattern() error {
-	if pattern == nil {
-		compilePattern := func() (*regexp.Regexp, error) {
-			patternStr := `^[a-z0-9][a-z0-9.-]*[a-z0-9]$`
-			return regexp.Compile(patternStr)
-		}
-
-		var err error
-		if pattern, err = compilePattern(); err != nil {
-			return errfmt.Wrap(ErrInvalidBucketName, err.Error())
-		}
-	}
+	var once sync.Once
+	once.Do(func() {
+		patternStr := `^[a-z0-9][a-z0-9.-]*[a-z0-9]$`
+		pattern = regexp.MustCompile(patternStr)
+	})
 
 	match := pattern.MatchString(string(b))
 	if !match {
