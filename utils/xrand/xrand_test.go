@@ -1,5 +1,5 @@
-// Package rand provides random values.
-package rand
+// Package xrand provides random values.
+package xrand
 
 import (
 	"regexp"
@@ -11,7 +11,10 @@ func TestRandomAlphanumericStr(t *testing.T) {
 
 	t.Run("success", func(t *testing.T) {
 		t.Parallel()
-		got := RandomLowerAlphanumericStr(10)
+		got, err := RandomLowerAlphanumericStr(10)
+		if err != nil {
+			t.Fatal(err)
+		}
 		if len(got) != 10 {
 			t.Errorf("RandomAlphanumericStr() = %v, want %v", got, 10)
 		}

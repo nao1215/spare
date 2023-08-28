@@ -8,7 +8,7 @@ import (
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/charmbracelet/log"
 	"github.com/nao1215/spare/config"
-	"github.com/nao1215/spare/errfmt"
+	"github.com/nao1215/spare/utils/errfmt"
 	"github.com/spf13/cobra"
 )
 

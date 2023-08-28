@@ -3,10 +3,10 @@ package model
 
 import (
 	"fmt"
-	"regexp"
 	"strings"
 
-	"github.com/nao1215/spare/errfmt"
+	"github.com/nao1215/spare/utils/errfmt"
+	"github.com/nao1215/spare/utils/xregex"
 )
 
 // Region is the name of the AWS region.
@@ -131,24 +131,12 @@ func (b BucketName) validateLength() error {
 	return nil
 }
 
-var pattern *regexp.Regexp //nolint:gochecknoglobals
+var s3RegexPattern xregex.Regex //nolint:gochecknoglobals
 
 // validatePattern validates the pattern of the bucket name.
 func (b BucketName) validatePattern() error {
-	if pattern == nil {
-		compilePattern := func() (*regexp.Regexp, error) {
-			patternStr := `^[a-z0-9][a-z0-9.-]*[a-z0-9]$`
-			return regexp.Compile(patternStr)
-		}
-
-		var err error
-		if pattern, err = compilePattern(); err != nil {
-			return errfmt.Wrap(ErrInvalidBucketName, err.Error())
-		}
-	}
-
-	match := pattern.MatchString(string(b))
-	if !match {
+	s3RegexPattern.InitOnce(`^[a-z0-9][a-z0-9.-]*[a-z0-9]$`)
+	if err := s3RegexPattern.MatchString(string(b)); err != nil {
 		return errfmt.Wrap(ErrInvalidBucketName, "s3 bucket name must use only lowercase letters, numbers, periods, and hyphens")
 	}
 	return nil

@@ -1,6 +1,6 @@
 package config
 
-import "github.com/nao1215/spare/errfmt"
+import "github.com/nao1215/spare/utils/errfmt"
 
 // DeployTarget is a type that represents a deploy target path.
 type DeployTarget string

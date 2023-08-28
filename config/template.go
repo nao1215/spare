@@ -1,6 +1,6 @@
 package config
 
-import "github.com/nao1215/spare/errfmt"
+import "github.com/nao1215/spare/utils/errfmt"
 
 // TemplateVersion is a type that represents a spare template version.
 type TemplateVersion string
