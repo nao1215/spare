@@ -3,11 +3,10 @@ package model
 
 import (
 	"fmt"
-	"regexp"
 	"strings"
-	"sync"
 
 	"github.com/nao1215/spare/utils/errfmt"
+	"github.com/nao1215/spare/utils/xregex"
 )
 
 // Region is the name of the AWS region.
@@ -132,36 +131,15 @@ func (b BucketName) validateLength() error {
 	return nil
 }
 
-// Regex is a type that represents a regular expression pattern.
-type Regex struct {
-	pattern *regexp.Regexp
-	mutex   sync.Mutex
-	once    sync.Once
-}
-
-var s3RegexPattern Regex //nolint:gochecknoglobals
-
-// initOnce initializes the bucketNamePattern.
-func (r *Regex) initOnce(pattern string) {
-	r.once.Do(func() {
-		r.pattern = regexp.MustCompile(pattern)
-	})
-}
-
-// MatchString returns true if the string s matches the pattern of the bucket name.
-func (r *Regex) MatchString(s string) error {
-	r.mutex.Lock()
-	defer r.mutex.Unlock()
-	if !r.pattern.MatchString(s) {
-		return errfmt.Wrap(ErrInvalidBucketName, "s3 bucket name must use only lowercase letters, numbers, periods, and hyphens")
-	}
-	return nil
-}
+var s3RegexPattern xregex.Regex //nolint:gochecknoglobals
 
 // validatePattern validates the pattern of the bucket name.
 func (b BucketName) validatePattern() error {
-	s3RegexPattern.initOnce(`^[a-z0-9][a-z0-9.-]*[a-z0-9]$`)
-	return s3RegexPattern.MatchString(string(b))
+	s3RegexPattern.InitOnce(`^[a-z0-9][a-z0-9.-]*[a-z0-9]$`)
+	if err := s3RegexPattern.MatchString(string(b)); err != nil {
+		return errfmt.Wrap(ErrInvalidBucketName, "s3 bucket name must use only lowercase letters, numbers, periods, and hyphens")
+	}
+	return nil
 }
 
 // validatePrefix validates the prefix of the bucket name.
