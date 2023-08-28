@@ -7,7 +7,7 @@ import (
 
 	"github.com/charmbracelet/log"
 	"github.com/nao1215/spare/app/domain/model"
-	"github.com/nao1215/spare/rand"
+	"github.com/nao1215/spare/utils/xrand"
 	"github.com/nao1215/spare/version"
 	"gopkg.in/yaml.v2"
 )
@@ -51,7 +51,7 @@ func NewConfig() *Config {
 // DefaultS3BucketName returns the default S3 bucket name.
 func (c *Config) DefaultS3BucketName() model.BucketName {
 	const randomStrLen = 15
-	randomID, err := rand.RandomLowerAlphanumericStr(randomStrLen)
+	randomID, err := xrand.RandomLowerAlphanumericStr(randomStrLen)
 	if err != nil {
 		log.Error(err)
 		randomID = "cannot-generate-random-id"

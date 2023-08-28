@@ -1,5 +1,5 @@
-// Package rand provides random values.
-package rand
+// Package xrand provides random values.
+package xrand
 
 import (
 	"crypto/rand"
