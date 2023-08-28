@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 
+	"github.com/charmbracelet/log"
 	"github.com/nao1215/spare/app/domain/model"
 	"github.com/nao1215/spare/rand"
 	"github.com/nao1215/spare/version"
@@ -50,9 +51,14 @@ func NewConfig() *Config {
 // DefaultS3BucketName returns the default S3 bucket name.
 func (c *Config) DefaultS3BucketName() model.BucketName {
 	const randomStrLen = 15
+	randomID, err := rand.RandomLowerAlphanumericStr(randomStrLen)
+	if err != nil {
+		log.Error(err)
+		randomID = "cannot-generate-random-id"
+	}
+
 	return model.BucketName(
-		fmt.Sprintf("%s-%s-%s",
-			version.Name, c.Region, rand.RandomLowerAlphanumericStr(randomStrLen)))
+		fmt.Sprintf("%s-%s-%s", version.Name, c.Region, randomID))
 }
 
 // Write writes the Config to the io.Writer.
