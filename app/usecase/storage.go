@@ -1,3 +1,4 @@
+// Package usecase is the abstraction layer for the business logic.
 package usecase
 
 import (

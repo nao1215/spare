@@ -87,6 +87,8 @@ func (s *S3Uploader) UploadFile(_ context.Context, input *service.FileUploaderIn
 }
 
 // BuckerCreatorSet is a provider set for BuckerCreator.
+//
+//nolint:gochecknoglobals
 var BuckerCreatorSet = wire.NewSet(
 	NewS3BucketCreator,
 	wire.Bind(new(service.BucketCreator), new(*S3BucketCreator)),

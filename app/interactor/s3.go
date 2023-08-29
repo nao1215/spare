@@ -1,3 +1,4 @@
+// Package interactor is the implementation for usecase.
 package interactor
 
 import (
@@ -10,6 +11,8 @@ import (
 )
 
 // StorageCreatorSet is a provider set for StorageCreator.
+//
+//nolint:gochecknoglobals
 var StorageCreatorSet = wire.NewSet(
 	NewStorageCreator,
 	wire.Struct(new(StorageCreatorOptions), "*"),
