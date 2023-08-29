@@ -11,6 +11,7 @@ import (
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
+	"github.com/google/wire"
 	"github.com/nao1215/spare/app/domain/model"
 	"github.com/nao1215/spare/app/domain/service"
 	"github.com/nao1215/spare/config"
@@ -84,6 +85,14 @@ func (s *S3Uploader) UploadFile(_ context.Context, input *service.FileUploaderIn
 	}
 	return &service.FileUploaderOutput{}, nil
 }
+
+// BuckerCreatorSet is a provider set for BuckerCreator.
+//
+//nolint:gochecknoglobals
+var BuckerCreatorSet = wire.NewSet(
+	NewS3BucketCreator,
+	wire.Bind(new(service.BucketCreator), new(*S3BucketCreator)),
+)
 
 // S3BucketCreator is an implementation for BucketCreator.
 type S3BucketCreator struct {

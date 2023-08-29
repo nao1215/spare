@@ -1,12 +1,16 @@
 package cmd
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"os"
 
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/charmbracelet/log"
+	"github.com/nao1215/spare/app/di"
+	"github.com/nao1215/spare/app/domain/model"
+	"github.com/nao1215/spare/app/usecase"
 	"github.com/nao1215/spare/config"
 	"github.com/nao1215/spare/utils/errfmt"
 	"github.com/spf13/cobra"
@@ -27,15 +31,39 @@ func newBuildCmd() *cobra.Command {
 }
 
 type builder struct {
+	// ctx is a context.Context.
+	ctx context.Context
+	// spare is a struct that executes the build command.
+	spare *di.Spare
+	// config is a struct that contains the settings for the spare CLI command.
+	config *config.Config
 	// debug is a flag that indicates whether to run debug mode.
 	debug bool
 }
 
 // Parse parses the arguments and flags.
 func (b *builder) Parse(cmd *cobra.Command, _ []string) (err error) {
+	b.ctx = context.Background()
 	if b.debug, err = cmd.Flags().GetBool("debug"); err != nil {
 		return errfmt.Wrap(err, "can not parse command line argument (--debug)")
 	}
+
+	b.config, err = b.readConfig()
+	if err != nil {
+		return err
+	}
+
+	var endpoint *model.Endpoint
+	if b.debug {
+		endpoint = &b.config.DebugLocalstackEndpoint
+	}
+
+	// Create a new instance of the Spare struct using the di.NewSpare function
+	b.spare, err = di.NewSpare(b.config.Region, endpoint)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 
@@ -44,24 +72,25 @@ func (b *builder) Parse(cmd *cobra.Command, _ []string) (err error) {
 func (b *builder) Do() error {
 	log.Info("spare", "debug mode", b.debug)
 	log.Info("validate setting fron .spare.yml")
-	cfg, err := b.readConfig()
-	if err != nil {
-		return err
-	}
 
-	if err := cfg.Validate(b.debug); err != nil {
+	if err := b.config.Validate(b.debug); err != nil {
 		return err
 	}
 	log.Info("setting is valid")
 
-	if err := b.confirm(cfg); err != nil {
+	if err := b.confirm(); err != nil {
 		return err
 	}
 
 	log.Info("start building AWS infrastructure")
 	log.Info("create S3 bucket")
 	// TODO: create S3 bucket and unit test
-
+	if _, err := b.spare.StorageCreator.CreateStorage(b.ctx, &usecase.CreateStorageInput{
+		BucketName: b.config.S3BucketName,
+		Region:     b.config.Region,
+	}); err != nil {
+		return err
+	}
 	return nil
 }
 
@@ -84,9 +113,9 @@ func (b *builder) readConfig() (*config.Config, error) {
 	return cfg, nil
 }
 
-func (b *builder) confirm(cfg *config.Config) error {
+func (b *builder) confirm() error {
 	fmt.Println("== .spare.yml ===================================")
-	if err := cfg.Write(os.Stdout); err != nil {
+	if err := b.config.Write(os.Stdout); err != nil {
 		return err
 	}
 	fmt.Println("=================================================")
