@@ -49,22 +49,26 @@ The 'edit' subcommand opens the .spare.yml file in the terminal. It displays exp
 The 'build' subcommand constructs the AWS infrastructure. As development progresses, the diagram of the infrastructure configuration to be built will be provided below.
 
 ```bash
-$ spare build
-2023/08/27 23:18:59 INFO spare debug mode=false
-2023/08/27 23:18:59 INFO validate setting fron .spare.yml
-2023/08/27 23:18:59 INFO setting is valid
-== .spare.yml ===================================
-spareTemplateVersion: 0.0.1
-deployTarget: src
-region: us-east-1
-customDomain: ""
-s3BucketName: spare-us-east-1-ukdzd41mdfch7e6
-allowOrigins: []
-debugLocalstackEndpoint: http://localhost:4566
-=================================================
+$ spare build --debug
+2023/08/30 23:12:10 INFO [VALIDATE] check .spare.yml
+2023/08/30 23:12:10 INFO [VALIDATE] ok .spare.yml
+2023/08/30 23:12:10 INFO [CONFIRM ] check the settings
+[debug mode]
+ true
+[aws profile]
+ localstack
+[.spare.yml]
+ spareTemplateVersion: 0.0.1
+ deployTarget: src
+ region: ap-northeast-1
+ customDomain: 
+ s3BucketName: spare-ap-northeast-1-ukdzd42mdfch2er
+ allowOrigins: 
+ debugLocalstackEndpoint: http://localhost:4566
+
 ? want to build AWS infrastructure with the above settings? Yes
-2023/08/27 23:19:02 INFO start building AWS infrastructure
-2023/08/27 23:19:02 INFO create S3 bucket
+2023/08/30 23:12:12 INFO [ CREATE ] start building AWS infrastructure
+2023/08/30 23:12:12 INFO [ CREATE ] S3 bucket name=spare-ap-northeast-1-ukdzd42mdfch2er
  :
  [WIP]
  :
