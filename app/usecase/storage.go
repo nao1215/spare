@@ -15,9 +15,9 @@ type StorageCreator interface {
 // CreateStorageInput is an input struct for StorageCreator.
 type CreateStorageInput struct {
 	// BucketName is the name of the bucket.
-	BucketName model.BucketNamer
+	BucketName model.BucketName
 	// Region is the name of the region where the bucket is located.
-	Region model.Regioner
+	Region model.Region
 }
 
 // CreateStorageOutput is an output struct for StorageCreator.

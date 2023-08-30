@@ -8,6 +8,7 @@ import (
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awserr"
+	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
@@ -102,14 +103,19 @@ type S3BucketCreator struct {
 var _ service.BucketCreator = &S3BucketCreator{}
 
 // NewS3BucketCreator returns a new S3BucketCreator struct.
-func NewS3BucketCreator(region model.Region, endpoint *model.Endpoint) *S3BucketCreator {
+func NewS3BucketCreator(profile model.AWSProfile, region model.Region, endpoint *model.Endpoint) *S3BucketCreator {
 	session := session.Must(session.NewSessionWithOptions(session.Options{
-		Config: aws.Config{Region: aws.String(region.String())},
+		SharedConfigState: session.SharedConfigEnable, // Ref. ~/.aws/config
+		Profile:           profile.String(),
 	}))
 
+	session.Config.Region = aws.String(region.String())
 	if endpoint != nil {
-		session.Config.WithLogLevel(aws.LogDebugWithHTTPBody)
+		// If you want to debug, uncomment the following lines.
+		// session.Config.WithLogLevel(aws.LogDebugWithHTTPBody)
+		session.Config.S3ForcePathStyle = aws.Bool(true)
 		session.Config.Endpoint = aws.String(endpoint.String())
+		session.Config.Credentials = credentials.NewStaticCredentials("dummy", "dummy", "") // TODO: Remove
 		session.Config.DisableSSL = aws.Bool(true)
 	}
 	return &S3BucketCreator{s3.New(session)}

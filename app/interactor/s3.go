@@ -3,6 +3,7 @@ package interactor
 
 import (
 	"context"
+	"errors"
 
 	"github.com/charmbracelet/log"
 	"github.com/google/wire"
@@ -39,7 +40,17 @@ func NewStorageCreator(opts *StorageCreatorOptions) *StorageCreator {
 }
 
 // CreateStorage creates a new external storage.
-func (s *StorageCreator) CreateStorage(_ context.Context, _ *usecase.CreateStorageInput) (*usecase.CreateStorageOutput, error) {
-	log.Info("not implemented yet")
+func (s *StorageCreator) CreateStorage(ctx context.Context, input *usecase.CreateStorageInput) (*usecase.CreateStorageOutput, error) {
+	if _, err := s.opts.BucketCreator.CreateBucket(ctx, &service.BucketCreatorInput{
+		Bucket: input.BucketName,
+		Region: input.Region,
+	}); err != nil {
+		if errors.Is(err, service.ErrBucketAlreadyOwnedByYou) {
+			// not error.
+			log.Info("you already create the bucket", "bucket name", input.BucketName.String())
+		} else {
+			return nil, err
+		}
+	}
 	return &usecase.CreateStorageOutput{}, nil
 }

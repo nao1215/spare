@@ -52,9 +52,9 @@ type FileUploader interface {
 
 // BucketCreatorInput is an input struct for BucketCreator.
 type BucketCreatorInput struct {
-	// Bucket is the name of the S3 bucket. It must be unique across all of AWS.
+	// Bucket is the name of the  bucket.
 	Bucket model.BucketName
-	// Region is the name of the AWS region.
+	// Region is the name of the region.
 	Region model.Region
 }
 
