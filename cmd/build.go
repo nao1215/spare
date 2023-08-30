@@ -78,24 +78,25 @@ func (b *builder) Parse(cmd *cobra.Command, _ []string) (err error) {
 // Do generate .spare.yml at current directory.
 // If .spare.yml already exists, return error.
 func (b *builder) Do() error {
-	log.Info("validate setting fron .spare.yml")
+	log.Info("[VALIDATE] check .spare.yml")
 	if err := b.config.Validate(b.debug); err != nil {
 		return err
 	}
-	log.Info("setting is valid")
+	log.Info("[VALIDATE] ok .spare.yml")
 
 	if err := b.confirm(); err != nil {
 		return err
 	}
 
-	log.Info("start building AWS infrastructure")
-	log.Info("create S3 bucket")
+	log.Info("[ CREATE ] start building AWS infrastructure")
+	log.Info("[ CREATE ] s3 bucket", "name", b.config.S3BucketName.String())
 	if _, err := b.spare.StorageCreator.CreateStorage(b.ctx, &usecase.CreateStorageInput{
 		BucketName: b.config.S3BucketName,
 		Region:     b.config.Region,
 	}); err != nil {
 		return err
 	}
+
 	return nil
 }
 
@@ -120,14 +121,20 @@ func (b *builder) readConfig() (*config.Config, error) {
 
 // confirm shows the settings and asks if you want to build AWS infrastructure.
 func (b *builder) confirm() error {
-	fmt.Println("")
-	fmt.Println("[DEBUG MODE]")
-	fmt.Println(b.debug)
-	fmt.Println("[AWS PROFILE]")
-	fmt.Println(b.awsProfile)
+	log.Info("[CONFIRM ] check the settings")
+	fmt.Println("[debug mode]")
+	fmt.Printf(" %t\n", b.debug)
+	fmt.Println("[aws profile]")
+	fmt.Printf(" %s\n", b.awsProfile.String())
 	fmt.Println("[.spare.yml]")
-	if err := b.config.Write(os.Stdout); err != nil {
-		return err
+	fmt.Printf(" spareTemplateVersion: %s\n", b.config.SpareTemplateVersion)
+	fmt.Printf(" deployTarget: %s\n", b.config.DeployTarget)
+	fmt.Printf(" region: %s\n", b.config.Region)
+	fmt.Printf(" customDomain: %s\n", b.config.CustomDomain)
+	fmt.Printf(" s3BucketName: %s\n", b.config.S3BucketName)
+	fmt.Printf(" allowOrigins: %s\n", b.config.AllowOrigins.String())
+	if b.debug {
+		fmt.Printf(" debugLocalstackEndpoint: %s\n", b.config.DebugLocalstackEndpoint)
 	}
 	fmt.Println("")
 

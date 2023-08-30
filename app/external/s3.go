@@ -8,7 +8,6 @@ import (
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awserr"
-	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
@@ -115,7 +114,7 @@ func NewS3BucketCreator(profile model.AWSProfile, region model.Region, endpoint 
 		// session.Config.WithLogLevel(aws.LogDebugWithHTTPBody)
 		session.Config.S3ForcePathStyle = aws.Bool(true)
 		session.Config.Endpoint = aws.String(endpoint.String())
-		session.Config.Credentials = credentials.NewStaticCredentials("dummy", "dummy", "") // TODO: Remove
+		//session.Config.Credentials = credentials.NewStaticCredentials("dummy", "dummy", "") // TODO: Remove
 		session.Config.DisableSSL = aws.Bool(true)
 	}
 	return &S3BucketCreator{s3.New(session)}
