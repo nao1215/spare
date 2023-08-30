@@ -16,8 +16,8 @@ import (
 // Injectors from wire.go:
 
 // NewSpare returns a new Spare struct.
-func NewSpare(region model.Region, endpoint *model.Endpoint) (*Spare, error) {
-	s3BucketCreator := external.NewS3BucketCreator(region, endpoint)
+func NewSpare(profile model.AWSProfile, region model.Region, endpoint *model.Endpoint) (*Spare, error) {
+	s3BucketCreator := external.NewS3BucketCreator(profile, region, endpoint)
 	storageCreatorOptions := &interactor.StorageCreatorOptions{
 		BucketCreator: s3BucketCreator,
 	}

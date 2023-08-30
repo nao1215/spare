@@ -233,3 +233,37 @@ func TestEndpointValidate(t *testing.T) {
 		})
 	}
 }
+
+func TestAllowOriginsString(t *testing.T) {
+	t.Parallel()
+	tests := []struct {
+		name string
+		a    AllowOrigins
+		want string
+	}{
+		{
+			name: "success",
+			a:    AllowOrigins{exampleCom, exampleNet},
+			want: "example.com,example.net",
+		},
+		{
+			name: "success. include empty string",
+			a:    AllowOrigins{exampleCom, ""},
+			want: "example.com",
+		},
+		{
+			name: "success. empty",
+			a:    AllowOrigins{},
+			want: "",
+		},
+	}
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			if got := tt.a.String(); got != tt.want {
+				t.Errorf("AllowOrigins.String() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}

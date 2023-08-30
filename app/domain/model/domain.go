@@ -57,6 +57,18 @@ func (a AllowOrigins) Validate() (err error) {
 	return err
 }
 
+// String returns the string representation of AllowOrigins.
+func (a AllowOrigins) String() string {
+	origins := make([]string, 0, len(a))
+	for _, origin := range a {
+		if origin.Empty() {
+			continue
+		}
+		origins = append(origins, origin.String())
+	}
+	return strings.Join(origins, ",")
+}
+
 // Endpoint is a type that represents an endpoint.
 type Endpoint string
 

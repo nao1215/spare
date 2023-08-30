@@ -13,7 +13,7 @@ import (
 )
 
 // NewSpare returns a new Spare struct.
-func NewSpare(region model.Region, endpoint *model.Endpoint) (*Spare, error) {
+func NewSpare(profile model.AWSProfile, region model.Region, endpoint *model.Endpoint) (*Spare, error) {
 	wire.Build(
 		interactor.StorageCreatorSet,
 		external.BuckerCreatorSet,
