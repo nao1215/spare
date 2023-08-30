@@ -59,7 +59,7 @@ func (a AllowOrigins) Validate() (err error) {
 
 // String returns the string representation of AllowOrigins.
 func (a AllowOrigins) String() string {
-	var origins []string
+	origins := make([]string, 0, len(a))
 	for _, origin := range a {
 		if origin.Empty() {
 			continue

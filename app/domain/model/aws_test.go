@@ -35,7 +35,7 @@ func TestNewAWSProfile(t *testing.T) { //nolint
 			want: AWSProfile("default"),
 		},
 	}
-	for _, tt := range tests {
+	for _, tt := range tests { //nolint
 		if tt.name == "success. p is empty" {
 			t.Setenv("AWS_PROFILE", "from env")
 		} else if tt.name == "success. p is empty and $AWS_PROFILE is empty" {
@@ -51,6 +51,8 @@ func TestNewAWSProfile(t *testing.T) { //nolint
 }
 
 func TestAWSProfileString(t *testing.T) {
+	t.Parallel()
+
 	tests := []struct {
 		name string
 		p    AWSProfile
@@ -63,7 +65,9 @@ func TestAWSProfileString(t *testing.T) {
 		},
 	}
 	for _, tt := range tests {
+		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
 			if got := tt.p.String(); got != tt.want {
 				t.Errorf("AWSProfile.String() = %v, want %v", got, tt.want)
 			}
