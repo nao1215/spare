@@ -74,8 +74,16 @@ $ spare build --debug
  :
 ```
 
-### [WIP] deploy subcommand
+### deploy subcommand
 The 'deploy' subcommand uploads the built artifacts to the S3 bucket or ECR repository. It also clears the CloudFront cache.
+```bash
+$ spare deploy --debug
+2023/08/31 23:06:31 INFO [  MODE  ] debug=true
+2023/08/31 23:06:31 INFO [ CONFIG ] profile=localstack
+2023/08/31 23:06:31 INFO [ DEPLOY ] target path=testdata bucket name=spare-ap-northeast-1-yqpshc0ctd29nyy
+2023/08/31 23:06:31 INFO [ DEPLOY ] file name=image/test.jpg
+2023/08/31 23:06:31 INFO [ DEPLOY ] file name=index.html
+```
 
 ### [WIP] delete subcommand
 The 'delete' subcommand deletes the AWS infrastructure and the SPA.
@@ -86,6 +94,15 @@ The 'cloudformation' subcommand outputs the CloudFormation template of the AWS i
 ### [WIP] validate subcommand
 The 'validate' subcommand validates the contents of the .spare.yml configuration file.
 
+## Contributing
+First off, thanks for taking the time to contribute! Contributions are not only related to development. For example, GitHub Star motivates me to develop!
+<a href="https://star-history.com/#nao1215/spare&Date">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=nao1215/spare&type=Date&theme=dark" />
+    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=nao1215/spare&type=Date" />
+    <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=nao1215/spare&type=Date" />
+  </picture>
+</a>
 
 ## Contact
 If you would like to send comments such as "find a bug" or "request for additional features" to the developer, please use one of the following contacts.
