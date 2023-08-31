@@ -55,6 +55,14 @@ func (s *S3Downloader) DownloadFile(_ context.Context, input *service.FileDownlo
 	}, nil
 }
 
+// FileUploaderSet is a provider set for FileUploader.
+//
+//nolint:gochecknoglobals
+var FileUploaderSet = wire.NewSet(
+	NewS3Uploader,
+	wire.Bind(new(service.FileUploader), new(*S3Uploader)),
+)
+
 // S3Uploader is an implementation for FileUploader.
 type S3Uploader struct {
 	*s3manager.Uploader
@@ -63,21 +71,29 @@ type S3Uploader struct {
 var _ service.FileUploader = &S3Uploader{}
 
 // NewS3Uploader returns a new S3Uploader struct.
-func NewS3Uploader(config config.S3) *S3Uploader {
+func NewS3Uploader(profile model.AWSProfile, region model.Region, endpoint *model.Endpoint) *S3Uploader {
 	session := session.Must(session.NewSessionWithOptions(session.Options{
 		SharedConfigState: session.SharedConfigEnable, // Ref. ~/.aws/config
-		Config:            aws.Config{Region: aws.String(config.Region.String())},
+		Profile:           profile.String(),
 	}))
+
+	session.Config.Region = aws.String(region.String())
+	if endpoint != nil {
+		// If you want to debug, uncomment the following lines.
+		// session.Config.WithLogLevel(aws.LogDebugWithHTTPBody)
+		session.Config.S3ForcePathStyle = aws.Bool(true)
+		session.Config.Endpoint = aws.String(endpoint.String())
+		session.Config.DisableSSL = aws.Bool(true)
+	}
 	return &S3Uploader{s3manager.NewUploader(session)}
 }
 
 // UploadFile uploads a file to S3.
 func (s *S3Uploader) UploadFile(_ context.Context, input *service.FileUploaderInput) (*service.FileUploaderOutput, error) {
 	uploadInput := &s3manager.UploadInput{
-		Bucket: aws.String(input.Config.Bucket.String()),
+		Bucket: aws.String(input.BucketName.String()),
 		Body:   aws.ReadSeekCloser(input.Data),
 		Key:    aws.String(input.Key),
-		// TODO: Set ContentType
 	}
 
 	if _, err := s.Upload(uploadInput); err != nil {

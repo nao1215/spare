@@ -54,3 +54,43 @@ func (s *StorageCreator) CreateStorage(ctx context.Context, input *usecase.Creat
 	}
 	return &usecase.CreateStorageOutput{}, nil
 }
+
+// FileUploaderSet is a provider set for FileUploader.
+//
+//nolint:gochecknoglobals
+var FileUploaderSet = wire.NewSet(
+	NewFileUploader,
+	wire.Struct(new(FileUploaderOptions), "*"),
+	wire.Bind(new(usecase.FileUploader), new(*FileUploader)),
+)
+
+var _ usecase.FileUploader = (*FileUploader)(nil)
+
+// FileUploader is an implementation for FileUploader.
+type FileUploader struct {
+	opts *FileUploaderOptions
+}
+
+// FileUploaderOptions is an option struct for FileUploader.
+type FileUploaderOptions struct {
+	service.FileUploader
+}
+
+// NewFileUploader returns a new FileUploader struct.
+func NewFileUploader(opts *FileUploaderOptions) *FileUploader {
+	return &FileUploader{
+		opts: opts,
+	}
+}
+
+// UploadFile uploads a file to external storage.
+func (u *FileUploader) UploadFile(ctx context.Context, input *usecase.UploadFileInput) (*usecase.UploadFileOutput, error) {
+	if _, err := u.opts.FileUploader.UploadFile(ctx, &service.FileUploaderInput{
+		BucketName: input.BucketName,
+		Key:        input.Key,
+		Data:       input.Data,
+	}); err != nil {
+		return nil, err
+	}
+	return &usecase.UploadFileOutput{}, nil
+}

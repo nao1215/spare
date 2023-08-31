@@ -32,8 +32,8 @@ type FileDownloder interface {
 
 // FileUploaderInput is an input struct for FileUploader.
 type FileUploaderInput struct {
-	// Config is S3 Config.
-	Config config.S3
+	// BucketName is the name of the bucket.
+	BucketName model.BucketName
 	// Key is the S3 key
 	Key string
 	// Data is the data to upload.

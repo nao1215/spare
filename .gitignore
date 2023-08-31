@@ -24,3 +24,4 @@ spare
 data
 localstack
 .spare.yml
+.envrc

@@ -16,7 +16,9 @@ import (
 func NewSpare(profile model.AWSProfile, region model.Region, endpoint *model.Endpoint) (*Spare, error) {
 	wire.Build(
 		interactor.StorageCreatorSet,
+		interactor.FileUploaderSet,
 		external.BuckerCreatorSet,
+		external.FileUploaderSet,
 		newSpare,
 	)
 	return nil, nil
@@ -26,11 +28,17 @@ func NewSpare(profile model.AWSProfile, region model.Region, endpoint *model.End
 type Spare struct {
 	// StorageCreator is an interface for creating external storage.
 	StorageCreator usecase.StorageCreator
+	// FileUploader is an interface for uploading files to external storage.
+	FileUploader usecase.FileUploader
 }
 
 // newSpare returns a new Spare struct.
-func newSpare(storageCreator usecase.StorageCreator) *Spare {
+func newSpare(
+	storageCreator usecase.StorageCreator,
+	fileUploader usecase.FileUploader,
+) *Spare {
 	return &Spare{
 		StorageCreator: storageCreator,
+		FileUploader:   fileUploader,
 	}
 }
