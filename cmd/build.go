@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"os"
 
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/charmbracelet/log"
@@ -12,7 +11,6 @@ import (
 	"github.com/nao1215/spare/app/domain/model"
 	"github.com/nao1215/spare/app/usecase"
 	"github.com/nao1215/spare/config"
-	"github.com/nao1215/spare/utils/errfmt"
 	"github.com/spf13/cobra"
 )
 
@@ -46,31 +44,15 @@ type builder struct {
 
 // Parse parses the arguments and flags.
 func (b *builder) Parse(cmd *cobra.Command, _ []string) (err error) {
-	b.ctx = context.Background()
-	if b.debug, err = cmd.Flags().GetBool("debug"); err != nil {
-		return errfmt.Wrap(err, "can not parse command line argument (--debug)")
-	}
-
-	profile, err := cmd.Flags().GetString("profile")
-	if err != nil {
-		return errfmt.Wrap(err, "can not parse command line argument (--profile)")
-	}
-	b.awsProfile = model.NewAWSProfile(profile)
-
-	b.config, err = b.readConfig()
+	commonOption, err := parseCommon(cmd, nil)
 	if err != nil {
 		return err
 	}
-	var endpoint *model.Endpoint
-	if b.debug {
-		endpoint = &b.config.DebugLocalstackEndpoint
-	}
-
-	// Create a new instance of the Spare struct using the di.NewSpare function
-	b.spare, err = di.NewSpare(b.awsProfile, b.config.Region, endpoint)
-	if err != nil {
-		return err
-	}
+	b.ctx = commonOption.ctx
+	b.spare = commonOption.spare
+	b.config = commonOption.config
+	b.debug = commonOption.debug
+	b.awsProfile = commonOption.awsProfile
 
 	return nil
 }
@@ -100,28 +82,10 @@ func (b *builder) Do() error {
 	return nil
 }
 
-// readConfig reads .spare.yml and returns config.Config.
-func (b *builder) readConfig() (*config.Config, error) {
-	file, err := os.Open(config.ConfigFilePath)
-	if err != nil {
-		return nil, err
-	}
-	defer func() {
-		if closeErr := file.Close(); closeErr != nil {
-			err = errors.Join(err, closeErr)
-		}
-	}()
-
-	cfg := config.NewConfig()
-	if err := cfg.Read(file); err != nil {
-		return nil, err
-	}
-	return cfg, nil
-}
-
 // confirm shows the settings and asks if you want to build AWS infrastructure.
 func (b *builder) confirm() error {
 	log.Info("[CONFIRM ] check the settings")
+	fmt.Println("")
 	fmt.Println("[debug mode]")
 	fmt.Printf(" %t\n", b.debug)
 	fmt.Println("[aws profile]")

@@ -49,6 +49,6 @@ func (i *initializer) Do() error {
 	if err := config.NewConfig().Write(file); err != nil {
 		return err
 	}
-	log.Info("generated .spare.yml")
+	log.Info("[ CREATE ]", "config file name", config.ConfigFilePath)
 	return nil
 }

@@ -22,7 +22,12 @@ func NewSpare(profile model.AWSProfile, region model.Region, endpoint *model.End
 		BucketCreator: s3BucketCreator,
 	}
 	storageCreator := interactor.NewStorageCreator(storageCreatorOptions)
-	spare := newSpare(storageCreator)
+	s3Uploader := external.NewS3Uploader(profile, region, endpoint)
+	fileUploaderOptions := &interactor.FileUploaderOptions{
+		FileUploader: s3Uploader,
+	}
+	fileUploader := interactor.NewFileUploader(fileUploaderOptions)
+	spare := newSpare(storageCreator, fileUploader)
 	return spare, nil
 }
 
@@ -32,11 +37,17 @@ func NewSpare(profile model.AWSProfile, region model.Region, endpoint *model.End
 type Spare struct {
 	// StorageCreator is an interface for creating external storage.
 	StorageCreator usecase.StorageCreator
+	// FileUploader is an interface for uploading files to external storage.
+	FileUploader usecase.FileUploader
 }
 
 // newSpare returns a new Spare struct.
-func newSpare(storageCreator usecase.StorageCreator) *Spare {
+func newSpare(
+	storageCreator usecase.StorageCreator,
+	fileUploader usecase.FileUploader,
+) *Spare {
 	return &Spare{
 		StorageCreator: storageCreator,
+		FileUploader:   fileUploader,
 	}
 }
