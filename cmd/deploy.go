@@ -73,7 +73,7 @@ func (d *deployer) Do() error {
 	for _, file := range files {
 		file := file
 		eg.Go(func() error {
-			f, err := os.Open(file)
+			f, err := os.Open(filepath.Clean(file))
 			if err != nil {
 				return err
 			}
