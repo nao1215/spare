@@ -11,7 +11,7 @@ require (
 	github.com/google/wire v0.5.0
 	github.com/nao1215/gorky v0.2.1
 	github.com/spf13/cobra v1.7.0
-	golang.org/x/sync v0.0.0-20220722155255-886fb9371eb4
+	golang.org/x/sync v0.3.0
 	gopkg.in/yaml.v2 v2.4.0
 )
 
