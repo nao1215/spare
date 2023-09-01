@@ -65,3 +65,35 @@ type BucketCreatorOutput struct{}
 type BucketCreator interface {
 	CreateBucket(context.Context, *BucketCreatorInput) (*BucketCreatorOutput, error)
 }
+
+// BucketPublicAccessBlockerInput is an input struct for BucketAccessBlocker.
+type BucketPublicAccessBlockerInput struct {
+	// Bucket is the name of the  bucket.
+	Bucket model.BucketName
+	// Region is the name of the region.
+	Region model.Region
+}
+
+// BucketPublicAccessBlockerOutput is an output struct for BucketAccessBlocker.
+type BucketPublicAccessBlockerOutput struct{}
+
+// BucketPublicAccessBlocker is an interface for blocking access to a bucket.
+type BucketPublicAccessBlocker interface {
+	BlockBucketPublicAccess(context.Context, *BucketPublicAccessBlockerInput) (*BucketPublicAccessBlockerOutput, error)
+}
+
+// BucketPolicySetterInput is an input struct for BucketPolicySetter.
+type BucketPolicySetterInput struct {
+	// Bucket is the name of the  bucket.
+	Bucket model.BucketName
+	// Policy is the policy to set.
+	Policy *model.BucketPolicy
+}
+
+// BucketPolicySetterOutput is an output struct for BucketPolicySetter.
+type BucketPolicySetterOutput struct{}
+
+// BucketPolicySetter is an interface for setting a bucket policy.
+type BucketPolicySetter interface {
+	SetBucketPolicy(context.Context, *BucketPolicySetterInput) (*BucketPolicySetterOutput, error)
+}

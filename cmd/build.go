@@ -71,7 +71,7 @@ func (b *builder) Do() error {
 	}
 
 	log.Info("[ CREATE ] start building AWS infrastructure")
-	log.Info("[ CREATE ] s3 bucket", "name", b.config.S3BucketName.String())
+	log.Info("[ CREATE ] s3 bucket with public access block policy", "name", b.config.S3BucketName.String())
 	if _, err := b.spare.StorageCreator.CreateStorage(b.ctx, &usecase.CreateStorageInput{
 		BucketName: b.config.S3BucketName,
 		Region:     b.config.Region,

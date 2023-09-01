@@ -5,6 +5,7 @@ go 1.21.0
 require (
 	github.com/AlecAivazis/survey/v2 v2.3.7
 	github.com/aws/aws-sdk-go v1.45.1
+	github.com/aws/aws-sdk-go-v2/service/s3 v1.38.5
 	github.com/caarlos0/env/v9 v9.0.0
 	github.com/charmbracelet/log v0.2.4
 	github.com/google/go-cmp v0.5.9
@@ -16,6 +17,7 @@ require (
 )
 
 require (
+	github.com/aws/smithy-go v1.14.2 // indirect
 	github.com/aymanbagabas/go-osc52/v2 v2.0.1 // indirect
 	github.com/charmbracelet/lipgloss v0.8.0 // indirect
 	github.com/go-logfmt/logfmt v0.6.0 // indirect
