@@ -10,32 +10,32 @@ import (
 // Statement is a type that represents a statement.
 type Statement struct {
 	// Sid is an identifier for the statement.
-	Sid string `json:"Sid"`
+	Sid string `json:"Sid"` //nolint
 	// Effect is whether the statement allows or denies access.
-	Effect string `json:"Effect"`
+	Effect string `json:"Effect"` //nolint
 	// Principal is the AWS account, IAM user, IAM role, federated user, or assumed-role user that the statement applies to.
-	Principal Principal `json:"Principal"`
+	Principal Principal `json:"Principal"` //nolint
 	// Action is the specific action or actions that will be allowed or denied.
-	Action []string `json:"Action"`
+	Action []string `json:"Action"` //nolint
 	// Resource is the specific Amazon S3 resources that the statement covers.
-	Resource []string `json:"Resource"`
+	Resource []string `json:"Resource"` //nolint
 	// The Condition element (or Condition block) lets you specify conditions for when a policy is in effect.
 	// https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_condition.html
-	Condition map[string]map[string]string `json:"Condition,omitempty"`
+	Condition map[string]map[string]string `json:"Condition,omitempty"` //nolint
 }
 
 // Principal is a type that represents a principal.
 type Principal struct {
 	// Service is the AWS service to which the principal belongs.
-	Service string `json:"Service"`
+	Service string `json:"Service"` //nolint
 }
 
 // BucketPolicy is a type that represents a bucket policy.
 type BucketPolicy struct {
 	// Version is the policy language version.
-	Version string `json:"Version"`
+	Version string `json:"Version"` //nolint
 	// Statement is the policy statement.
-	Statement []Statement `json:"Statement"`
+	Statement []Statement `json:"Statement"` //nolint
 }
 
 // NewAllowCloudFrontS3BucketPolicy returns a new BucketPolicy that allows CloudFront to access the S3 bucket.
