@@ -18,8 +18,12 @@ import (
 // NewSpare returns a new Spare struct.
 func NewSpare(profile model.AWSProfile, region model.Region, endpoint *model.Endpoint) (*Spare, error) {
 	s3BucketCreator := external.NewS3BucketCreator(profile, region, endpoint)
+	s3BucketPublicAccessBlocker := external.NewS3BucketPublicAccessBlocker(profile, region, endpoint)
+	s3BucketPolicySetter := external.NewS3BucketPolicySetter(profile, region, endpoint)
 	storageCreatorOptions := &interactor.StorageCreatorOptions{
-		BucketCreator: s3BucketCreator,
+		BucketCreator:             s3BucketCreator,
+		BucketPublicAccessBlocker: s3BucketPublicAccessBlocker,
+		BucketPolicySetter:        s3BucketPolicySetter,
 	}
 	storageCreator := interactor.NewStorageCreator(storageCreatorOptions)
 	s3Uploader := external.NewS3Uploader(profile, region, endpoint)

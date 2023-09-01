@@ -19,6 +19,8 @@ func NewSpare(profile model.AWSProfile, region model.Region, endpoint *model.End
 		interactor.FileUploaderSet,
 		external.BuckerCreatorSet,
 		external.FileUploaderSet,
+		external.BucketPublicAccessBlockerSet,
+		external.BucketPolicySetterSet,
 		newSpare,
 	)
 	return nil, nil

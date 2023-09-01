@@ -7,6 +7,7 @@ import (
 
 	"github.com/charmbracelet/log"
 	"github.com/google/wire"
+	"github.com/nao1215/spare/app/domain/model"
 	"github.com/nao1215/spare/app/domain/service"
 	"github.com/nao1215/spare/app/usecase"
 )
@@ -30,6 +31,8 @@ type StorageCreator struct {
 // StorageCreatorOptions is an option struct for StorageCreator.
 type StorageCreatorOptions struct {
 	service.BucketCreator
+	service.BucketPublicAccessBlocker
+	service.BucketPolicySetter
 }
 
 // NewStorageCreator returns a new StorageCreator struct.
@@ -52,6 +55,21 @@ func (s *StorageCreator) CreateStorage(ctx context.Context, input *usecase.Creat
 			return nil, err
 		}
 	}
+
+	if _, err := s.opts.BucketPublicAccessBlocker.BlockBucketPublicAccess(ctx, &service.BucketPublicAccessBlockerInput{
+		Bucket: input.BucketName,
+		Region: input.Region,
+	}); err != nil {
+		return nil, err
+	}
+
+	if _, err := s.opts.BucketPolicySetter.SetBucketPolicy(ctx, &service.BucketPolicySetterInput{
+		Bucket: input.BucketName,
+		Policy: model.NewAllowCloudFrontS3BucketPolicy(input.BucketName),
+	}); err != nil {
+		return nil, err
+	}
+
 	return &usecase.CreateStorageOutput{}, nil
 }
 
