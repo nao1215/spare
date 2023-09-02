@@ -26,7 +26,9 @@ The development of the 'spare' command stemmed from the desire to empower fronte
 ## How to install
 ### Use "go install"
 If you does not have the golang development environment installed on your system, please install golang from [the golang official website](https://go.dev/doc/install).
-
+```bash
+go install github.com/nao1215/spare@latest
+```
 ## How to use
 ### init subcommand
 init subcommand create the configuration file .spare.yml in the current directory. If you want to change the configuration file name, please use the edit subcommand.
