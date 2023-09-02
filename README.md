@@ -12,9 +12,9 @@ Work in progress: Please do not use the code from this repository.
 
 The 'spare' command makes easily the release of Single Page Applications. Spare constructs the infrastructure on AWS to operate the SPA, and then deploys the SPA (please note that it does not support building the SPA). Developers can inspect the infrastructure as CloudFormation before or after its construction.
 
-The development of the 'spare' command stemmed from the desire to empower frontend engineers to deploy SPAs without relying on the skills of backend engineers, thus enhancing productivity. Additionally, the aim was to reduce the effort for backend engineers in repeatedly setting up common infrastructures. Therefore, the goal is for developers to use the 'spare' command rather than writing CloudFormation scripts.
+![diagram](./docs/images/s3_cloudfront.png)
 
-The 'spare' command constructs the infrastructure according to the configuration file .spare.yml. To facilitate easy editing of this configuration file, we have provided the 'edit' subcommand (but not implement).
+The development of the 'spare' command stemmed from the desire to empower frontend engineers to deploy SPAs without relying on the skills of backend engineers, thus enhancing productivity. Additionally, the aim was to reduce the effort for backend engineers in repeatedly setting up common infrastructures. Therefore, the goal is for developers to use the 'spare' command rather than writing CloudFormation scripts.
 
 ## Support OS & golang version
 - Linux
@@ -42,10 +42,7 @@ allowOrigins: []
 debugLocalstackEndpoint: http://localhost:4566
 ```
 
-### [WIP] edit subcommand
-The 'edit' subcommand opens the .spare.yml file in the terminal. It displays explanations for each parameter, allowing users to set values without confusion. Additionally, after setting values for parameters, it performs validation to prevent saving the configuration file with incorrect settings.
-
-### [WIP] build subcommand
+### build subcommand
 The 'build' subcommand constructs the AWS infrastructure. 
 
 ```bash
@@ -91,15 +88,6 @@ $ spare deploy --debug
  :
  :
 ```
-
-### [WIP] delete subcommand
-The 'delete' subcommand deletes the AWS infrastructure and the SPA.
-
-### [WIP] cloudformation subcommand
-The 'cloudformation' subcommand outputs the CloudFormation template of the AWS infrastructure to be built by the 'create' subcommand.
-
-### [WIP] validate subcommand
-The 'validate' subcommand validates the contents of the .spare.yml configuration file.
 
 ## How to develop
 To develop the spare command, you will need an AWS account or the Pro version of localstack, which costs $35 USD per month as of September 2023.The configuration for localstack is specified in the compose.yml file. You can start localstack using the following command:
@@ -151,7 +139,7 @@ $ spare bug-report
 
 ## License
 The spare command is released under the MIT License, see [LICENSE](./LICENSE).
-[testdata](https://www.free-css.com/free-css-templates/page294/primecare) is released under the [Creative Commons](https://www.free-css.com/help-and-support/copyright-notice#terms-of-use).
+[testdata](https://www.free-css.com/free-css-templates/page270/xbee) is released under the [Creative Commons](https://www.free-css.com/help-and-support/copyright-notice#terms-of-use).
 
 ## Special Thanks
 ![localstack](./docs/images/localstack-readme-banner.svg)

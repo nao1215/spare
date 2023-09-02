@@ -1,0 +1,286 @@
+body {
+    overflow-x: hidden;
+    font-family: 'Lato', sans-serif;
+    margin: 0px;
+}
+
+.wrapper {
+    width: 80%;
+}
+
+.back-to-top {
+    float: right !important;
+    background: none;
+    margin: 0;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    width: 70px;
+    height: 70px;
+    z-index: 300;
+    display: none;
+    text-decoration: none;
+    color: #ffffff;
+    background-color: #ff9000;
+}
+
+.back-to-top i {
+    font-size: 60px;
+}
+
+.text-muted {
+    color: #777
+}
+
+.text-primary {
+    color: #266dd2;
+}
+
+p {
+    font-size: 14px;
+    line-height: 1.75
+}
+
+p.large {
+    font-size: 16px
+}
+
+a,
+a:hover,
+a:focus,
+a:active,
+a.active {
+    outline: 0
+}
+
+a {
+    color: #266dd2;
+}
+
+a:hover,
+a:focus,
+a:active,
+a.active {
+    color: #266dd2;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: 'Lato', sans-serif;
+    text-transform: uppercase;
+    font-weight: 900;
+}
+
+.img-centered {
+    margin: 0 auto
+}
+
+.bg-light-gray {
+    background-color: #f7f7f7
+}
+
+.bg-darkest-gray {
+    background-color: #222
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: #266dd2;
+    border-color: #266dd2;
+    font-family: 'Lato', sans-serif;
+    text-transform: uppercase;
+    font-weight: 700
+}
+
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active,
+.btn-primary.active,
+.open .dropdown-toggle.btn-primary {
+    color: #fff;
+    background-color: #fec503;
+    border-color: #f6bf01
+}
+
+.btn-primary:active,
+.btn-primary.active,
+.open .dropdown-toggle.btn-primary {
+    background-image: none
+}
+
+.btn-primary.disabled,
+.btn-primary[disabled],
+fieldset[disabled] .btn-primary,
+.btn-primary.disabled:hover,
+.btn-primary[disabled]:hover,
+fieldset[disabled] .btn-primary:hover,
+.btn-primary.disabled:focus,
+.btn-primary[disabled]:focus,
+fieldset[disabled] .btn-primary:focus,
+.btn-primary.disabled:active,
+.btn-primary[disabled]:active,
+fieldset[disabled] .btn-primary:active,
+.btn-primary.disabled.active,
+.btn-primary[disabled].active,
+fieldset[disabled] .btn-primary.active {
+    background-color: #266dd2;
+    border-color: #266dd2
+}
+
+.btn-primary .badge {
+    color: #266dd2;
+    background-color: #fff;
+}
+
+.btn-xl {
+    color: #fff;
+    background-color: #266dd2;
+   font-family: 'Lato', sans-serif;
+    text-transform: uppercase;
+    font-weight: 700;
+    border-radius: 0;
+    font-size: 18px;
+    padding: 15px 40px;
+    text-decoration: none;
+}
+
+.btn-xl:hover,
+.btn-xl:focus,
+.btn-xl:active,
+.btn-xl.active,
+.open .dropdown-toggle.btn-xl {
+    color: #fff;
+    background-color: #48AAF1;
+    border-color: #48AAF1;
+    text-decoration: none;
+}
+
+.btn-xl:active,
+.btn-xl.active,
+.open .dropdown-toggle.btn-xl {
+    background-image: none
+}
+
+.btn-xl.disabled,
+.btn-xl[disabled],
+fieldset[disabled] .btn-xl,
+.btn-xl.disabled:hover,
+.btn-xl[disabled]:hover,
+fieldset[disabled] .btn-xl:hover,
+.btn-xl.disabled:focus,
+.btn-xl[disabled]:focus,
+fieldset[disabled] .btn-xl:focus,
+.btn-xl.disabled:active,
+.btn-xl[disabled]:active,
+fieldset[disabled] .btn-xl:active,
+.btn-xl.disabled.active,
+.btn-xl[disabled].active,
+fieldset[disabled] .btn-xl.active {
+    background-color: #48AAF1;
+    border-color: #48AAF1;
+}
+
+.btn-xl .badge {
+    color: #48AAF1;
+    ;
+    background-color: #fff
+}
+
+.demo-picker-top {
+    background-color: #121212;
+    width: 100%;
+    height: 300px;
+}
+
+.picker-logo {
+    width: 450px;
+    height: 100%;
+    margin: 0 auto;
+    padding-top: 80px;
+}
+
+.align-center {
+    text-align: center;
+    margin: 0 auto;
+}
+.choose-demo {
+    color: #121212;
+    margin-top: 40px;
+    font-weight: 200;
+}
+
+.demo-picker {
+    padding: 0px 2% 0px 2%;
+    min-height: 500px;
+    margin: 0 auto;
+}
+
+.picture-demo {
+    width: 100%;
+}
+
+.picture-demo:hover {
+    background-color: linear-gradient(to right, #7b4397, #dc2430);
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+    transition: all 0.3s;
+    opacity: 0.8;
+}
+
+img {
+    width: 100%;
+}
+
+.demo-container {
+    padding-top: 40px;
+    width: 100%;
+    float: left;
+    position: relative;
+}
+
+.demo {
+    float: left;
+    padding: 15px;
+    height: 100%;
+}
+
+.demo-title {
+    text-align: center;
+}
+
+.demo-button {
+    padding-top: 30px;
+    margin: 0 auto;
+    width: 100%;
+    height: 100%;
+}
+
+.footer {
+    width: 100%;
+    height: 150px;
+    float: left;
+}
+
+.border {
+    width: 60%;
+    height: 1px;
+    background-color: #3C3C3C;
+    margin: 0 auto;
+}
+
+p.copy {
+    padding-top: 25px;
+}
+
+.copyright {
+    width: 100%;
+    font-size: 14px;
+    color: #3C3C3C;
+    padding-top: 80px;
+    position: relative;
+}
