@@ -14,7 +14,7 @@ The 'spare' command makes easily the release of Single Page Applications. Spare 
 
 The development of the 'spare' command stemmed from the desire to empower frontend engineers to deploy SPAs without relying on the skills of backend engineers, thus enhancing productivity. Additionally, the aim was to reduce the effort for backend engineers in repeatedly setting up common infrastructures. Therefore, the goal is for developers to use the 'spare' command rather than writing CloudFormation scripts.
 
-The 'spare' command constructs the infrastructure according to the configuration file .spare.yml. To facilitate easy editing of this configuration file, we have provided the 'edit' subcommand.
+The 'spare' command constructs the infrastructure according to the configuration file .spare.yml. To facilitate easy editing of this configuration file, we have provided the 'edit' subcommand (but not implement).
 
 ## Support OS & golang version
 - Linux
@@ -46,43 +46,50 @@ debugLocalstackEndpoint: http://localhost:4566
 The 'edit' subcommand opens the .spare.yml file in the terminal. It displays explanations for each parameter, allowing users to set values without confusion. Additionally, after setting values for parameters, it performs validation to prevent saving the configuration file with incorrect settings.
 
 ### [WIP] build subcommand
-The 'build' subcommand constructs the AWS infrastructure. As development progresses, the diagram of the infrastructure configuration to be built will be provided below.
+The 'build' subcommand constructs the AWS infrastructure. 
 
 ```bash
 $ spare build --debug
-2023/08/30 23:12:10 INFO [VALIDATE] check .spare.yml
-2023/08/30 23:12:10 INFO [VALIDATE] ok .spare.yml
-2023/08/30 23:12:10 INFO [CONFIRM ] check the settings
+2023/09/02 17:28:18 INFO [VALIDATE] check .spare.yml
+2023/09/02 17:28:18 INFO [VALIDATE] ok .spare.yml
+2023/09/02 17:28:18 INFO [CONFIRM ] check the settings
+
 [debug mode]
  true
 [aws profile]
  localstack
 [.spare.yml]
  spareTemplateVersion: 0.0.1
- deployTarget: src
+ deployTarget: testdata
  region: ap-northeast-1
- customDomain: 
- s3BucketName: spare-ap-northeast-1-ukdzd42mdfch2er
- allowOrigins: 
+ customDomain:
+ s3BucketName: spare-northeast-2q21wk200dunjsem
+ allowOrigins:
  debugLocalstackEndpoint: http://localhost:4566
 
-? want to build AWS infrastructure with the above settings? Yes
-2023/08/30 23:12:12 INFO [ CREATE ] start building AWS infrastructure
-2023/08/30 23:12:12 INFO [ CREATE ] S3 bucket name=spare-ap-northeast-1-ukdzd42mdfch2er
- :
- [WIP]
- :
+? want to build AWS infrastructure with the above settings? Yes                                       
+2023/09/02 17:28:20 INFO [ CREATE ] start building AWS infrastructure
+2023/09/02 17:28:20 INFO [ CREATE ] s3 bucket with public access block policy name=spare-northeast-2q21wk200dunjsem
+2023/09/02 17:28:20 INFO [ CREATE ] cloudfront distribution
+2023/09/02 17:28:20 INFO [ CREATE ] cloudfront distribution domain=localhost:4516
 ```
 
 ### deploy subcommand
-The 'deploy' subcommand uploads the built artifacts to the S3 bucket or ECR repository. It also clears the CloudFront cache.
+The 'deploy' subcommand uploads the built artifacts to the S3 bucket.
 ```bash
 $ spare deploy --debug
-2023/08/31 23:06:31 INFO [  MODE  ] debug=true
-2023/08/31 23:06:31 INFO [ CONFIG ] profile=localstack
-2023/08/31 23:06:31 INFO [ DEPLOY ] target path=testdata bucket name=spare-ap-northeast-1-yqpshc0ctd29nyy
-2023/08/31 23:06:31 INFO [ DEPLOY ] file name=image/test.jpg
-2023/08/31 23:06:31 INFO [ DEPLOY ] file name=index.html
+2023/09/02 17:29:01 INFO [  MODE  ] debug=true
+2023/09/02 17:29:01 INFO [ CONFIG ] profile=localstack
+2023/09/02 17:29:01 INFO [ DEPLOY ] target path=testdata bucket name=spare-northeast-2q21wk200dunjsem 
+2023/09/02 17:29:01 INFO [ DEPLOY ] file name=images/why3.png
+2023/09/02 17:29:01 INFO [ DEPLOY ] file name=why.html
+2023/09/02 17:29:01 INFO [ DEPLOY ] file name=css/responsive.css
+2023/09/02 17:29:01 INFO [ DEPLOY ] file name=about.html
+2023/09/02 17:29:01 INFO [ DEPLOY ] file name=css/font-awesome.min.css
+2023/09/02 17:29:01 INFO [ DEPLOY ] file name=contact.html
+2023/09/02 17:29:01 INFO [ DEPLOY ] file name=js/custom.js
+ :
+ :
 ```
 
 ### [WIP] delete subcommand
@@ -93,6 +100,34 @@ The 'cloudformation' subcommand outputs the CloudFormation template of the AWS i
 
 ### [WIP] validate subcommand
 The 'validate' subcommand validates the contents of the .spare.yml configuration file.
+
+## How to develop
+To develop the spare command, you will need an AWS account or the Pro version of localstack, which costs $35 USD per month as of September 2023.The configuration for localstack is specified in the compose.yml file. You can start localstack using the following command:
+
+```bash
+$ docker-compose up
+```
+
+If you choose to use localstack, please add the following information to your ~/.aws/config and ~/.aws/credentials files. The region can be set to any value you prefer.
+```
+$ cat ~/.aws/config 
+[profile localstack]
+region = ap-northeast-1
+output = json
+
+$ cat ~/.aws/credentials 
+[localstack]
+aws_access_key_id = dummy
+aws_secret_access_key = dummy
+```
+
+The spare command uses the value of the AWS_PROFILE environment variable. If you are using localstack for debugging, you can set the AWS_PROFILE environment variable as follows:
+```bash
+export AWS_PROFILE=localstack
+export LOCALSTACK_API_KEY=your_api_key
+```
+
+The spare command has a --debug option for its subcommands that access the infrastructure, and when --debug is enabled, it accesses localstack.
 
 ## Contributing
 First off, thanks for taking the time to contribute! Contributions are not only related to development. For example, GitHub Star motivates me to develop!
@@ -116,6 +151,7 @@ $ spare bug-report
 
 ## License
 The spare command is released under the MIT License, see [LICENSE](./LICENSE).
+[Author of testdata](https://www.free-css.com/free-css-templates/page294/primecare) is downloaded. License is [Creative Commons](https://www.free-css.com/help-and-support/copyright-notice#terms-of-use).
 
 ## Special Thanks
 ![localstack](./docs/images/localstack-readme-banner.svg)
