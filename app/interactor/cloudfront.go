@@ -25,6 +25,7 @@ type CDNCreator struct {
 // CDNCreatorOptions is an option struct for CDNCreator.
 type CDNCreatorOptions struct {
 	service.CDNCreator
+	service.OAICreator
 }
 
 // NewCDNCreator returns a new CDNCreator struct.
@@ -36,8 +37,14 @@ func NewCDNCreator(opts *CDNCreatorOptions) *CDNCreator {
 
 // CreateCDN creates a CDN.
 func (c *CDNCreator) CreateCDN(ctx context.Context, input *usecase.CreateCDNInput) (*usecase.CreateCDNOutput, error) {
+	oaiOutput, err := c.opts.OAICreator.CreateOAI(ctx, &service.OAICreatorInput{})
+	if err != nil {
+		return nil, err
+	}
+
 	createCDNOutput, err := c.opts.CDNCreator.CreateCDN(ctx, &service.CDNCreatorInput{
 		BucketName: input.BucketName,
+		OAIID:      oaiOutput.ID,
 	})
 	if err != nil {
 		return nil, err

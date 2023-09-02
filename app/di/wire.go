@@ -23,6 +23,7 @@ func NewSpare(profile model.AWSProfile, region model.Region, endpoint *model.End
 		external.BucketPublicAccessBlockerSet,
 		external.BucketPolicySetterSet,
 		external.CDNCreatorSet,
+		external.OAICreatorSet,
 		newSpare,
 	)
 	return nil, nil

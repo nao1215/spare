@@ -27,8 +27,10 @@ func NewSpare(profile model.AWSProfile, region model.Region, endpoint *model.End
 	}
 	storageCreator := interactor.NewStorageCreator(storageCreatorOptions)
 	cloudFrontCDNCreator := external.NewCloudFrontCDNCreator(profile, region, endpoint)
+	cloudFrontOAICreator := external.NewCloudFrontOAICreator(profile, region, endpoint)
 	cdnCreatorOptions := &interactor.CDNCreatorOptions{
 		CDNCreator: cloudFrontCDNCreator,
+		OAICreator: cloudFrontOAICreator,
 	}
 	cdnCreator := interactor.NewCDNCreator(cdnCreatorOptions)
 	s3Uploader := external.NewS3Uploader(profile, region, endpoint)

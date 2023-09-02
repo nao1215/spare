@@ -1,3 +1,4 @@
+// Package service is an abstraction layer for accessing external services.
 package service
 
 import "errors"
@@ -13,4 +14,6 @@ var (
 	ErrBucketPolicySet = errors.New("failed to set bucket policy")
 	// ErrCDNAlreadyExist is an error that occurs when the CDN already exists.
 	ErrCDNAlreadyExists = errors.New("CDN already exists")
+	// ErrOriginAccessIdentifyAlreadyExist is an error that occurs when the origin access identify already exists.
+	ErrOriginAccessIdentifyAlreadyExists = errors.New("origin access identify already exists")
 )
