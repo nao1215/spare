@@ -32,7 +32,8 @@ func newS3Session(profile model.AWSProfile, region model.Region, endpoint *model
 
 // detectContentType detects the content type of the file.
 func detectContentType(reader io.Reader) (string, error) {
-	buffer := make([]byte, 512)
+	const neededBytes = 512
+	buffer := make([]byte, neededBytes)
 	_, err := reader.Read(buffer)
 	if err != nil && err != io.EOF {
 		return "", errfmt.Wrap(service.ErrNotDetectContentType, err.Error())
