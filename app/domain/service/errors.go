@@ -1,3 +1,4 @@
+// Package service is an abstraction layer for accessing external services.
 package service
 
 import "errors"
@@ -11,4 +12,12 @@ var (
 	ErrBucketPublicAccessBlock = errors.New("failed to set public access block")
 	// ErrBucketPolicySet is an error that occurs when the bucket policy setting fails.
 	ErrBucketPolicySet = errors.New("failed to set bucket policy")
+	// ErrCDNAlreadyExist is an error that occurs when the CDN already exists.
+	ErrCDNAlreadyExists = errors.New("CDN already exists")
+	// ErrOriginAccessIdentifyAlreadyExist is an error that occurs when the origin access identify already exists.
+	ErrOriginAccessIdentifyAlreadyExists = errors.New("origin access identify already exists")
+	// ErrNotDetectContentType is an error that occurs when the content type cannot be detected.
+	ErrNotDetectContentType = errors.New("failed to detect content type")
+	// ErrFileUpload is an error that occurs when the file upload fails.
+	ErrFileUpload = errors.New("failed to upload file")
 )

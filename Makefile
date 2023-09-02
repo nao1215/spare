@@ -27,7 +27,7 @@ generate: ## Generate file automatically
 	tbls doc --force 
 
 clean: ## Clean project
-	-rm -rf $(APP) cover.out cover.html
+	-rm -rf $(APP) cover.out cover.html .spare.yml
 
 test: ## Start test
 	env GOOS=$(GOOS) $(GO_TEST) -cover $(GO_PKGROOT) -coverprofile=cover.out

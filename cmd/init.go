@@ -50,5 +50,7 @@ func (i *initializer) Do() error {
 		return err
 	}
 	log.Info("[ CREATE ]", "config file name", config.ConfigFilePath)
+	log.Info("[  INFO  ] If you need to change the setting values, please refer to the documentation")
+	log.Info("[  INFO  ] https://github.com/nao1215/spare/blob/main/README.md")
 	return nil
 }

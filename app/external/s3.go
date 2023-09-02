@@ -78,10 +78,20 @@ func NewS3Uploader(profile model.AWSProfile, region model.Region, endpoint *mode
 
 // UploadFile uploads a file to S3.
 func (s *S3Uploader) UploadFile(_ context.Context, input *service.FileUploaderInput) (*service.FileUploaderOutput, error) {
+	contentDetectReader, uploadReader, err := duplicateReader(input.Data)
+	if err != nil {
+		return nil, errfmt.Wrap(service.ErrFileUpload, err.Error())
+	}
+	contentType, err := detectContentType(contentDetectReader)
+	if err != nil {
+		return nil, errfmt.Wrap(service.ErrFileUpload, err.Error())
+	}
+
 	uploadInput := &s3manager.UploadInput{
-		Bucket: aws.String(input.BucketName.String()),
-		Body:   aws.ReadSeekCloser(input.Data),
-		Key:    aws.String(input.Key),
+		Bucket:      aws.String(input.BucketName.String()),
+		Body:        aws.ReadSeekCloser(uploadReader),
+		Key:         aws.String(input.Key),
+		ContentType: aws.String(contentType),
 	}
 
 	if _, err := s.Upload(uploadInput); err != nil {

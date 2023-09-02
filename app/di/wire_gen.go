@@ -26,12 +26,19 @@ func NewSpare(profile model.AWSProfile, region model.Region, endpoint *model.End
 		BucketPolicySetter:        s3BucketPolicySetter,
 	}
 	storageCreator := interactor.NewStorageCreator(storageCreatorOptions)
+	cloudFrontCDNCreator := external.NewCloudFrontCDNCreator(profile, region, endpoint)
+	cloudFrontOAICreator := external.NewCloudFrontOAICreator(profile, region, endpoint)
+	cdnCreatorOptions := &interactor.CDNCreatorOptions{
+		CDNCreator: cloudFrontCDNCreator,
+		OAICreator: cloudFrontOAICreator,
+	}
+	cdnCreator := interactor.NewCDNCreator(cdnCreatorOptions)
 	s3Uploader := external.NewS3Uploader(profile, region, endpoint)
 	fileUploaderOptions := &interactor.FileUploaderOptions{
 		FileUploader: s3Uploader,
 	}
 	fileUploader := interactor.NewFileUploader(fileUploaderOptions)
-	spare := newSpare(storageCreator, fileUploader)
+	spare := newSpare(storageCreator, cdnCreator, fileUploader)
 	return spare, nil
 }
 
@@ -41,6 +48,8 @@ func NewSpare(profile model.AWSProfile, region model.Region, endpoint *model.End
 type Spare struct {
 	// StorageCreator is an interface for creating external storage.
 	StorageCreator usecase.StorageCreator
+	// CDNCreator is an interface for creating CDN.
+	CDNCreator usecase.CDNCreator
 	// FileUploader is an interface for uploading files to external storage.
 	FileUploader usecase.FileUploader
 }
@@ -48,10 +57,12 @@ type Spare struct {
 // newSpare returns a new Spare struct.
 func newSpare(
 	storageCreator usecase.StorageCreator,
+	cdncreator usecase.CDNCreator,
 	fileUploader usecase.FileUploader,
 ) *Spare {
 	return &Spare{
 		StorageCreator: storageCreator,
+		CDNCreator:     cdncreator,
 		FileUploader:   fileUploader,
 	}
 }

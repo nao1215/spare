@@ -79,6 +79,15 @@ func (b *builder) Do() error {
 		return err
 	}
 
+	log.Info("[ CREATE ] cloudfront distribution")
+	createCDNOutput, err := b.spare.CDNCreator.CreateCDN(b.ctx, &usecase.CreateCDNInput{
+		BucketName: b.config.S3BucketName,
+	})
+	if err != nil {
+		return err
+	}
+	log.Info("[ CREATE ] cloudfront distribution", "domain", createCDNOutput.Domain.String())
+
 	return nil
 }
 
