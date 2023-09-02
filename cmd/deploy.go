@@ -4,6 +4,7 @@ import (
 	"context"
 	"os"
 	"path/filepath"
+	"runtime"
 	"strings"
 
 	"github.com/charmbracelet/log"
@@ -14,6 +15,7 @@ import (
 	"github.com/nao1215/spare/utils/file"
 	"github.com/spf13/cobra"
 	"golang.org/x/sync/errgroup"
+	"golang.org/x/sync/semaphore"
 )
 
 // newDeployCmd return deploy sub command.
@@ -70,9 +72,15 @@ func (d *deployer) Do() error {
 	}
 
 	eg, ctx := errgroup.WithContext(d.ctx)
+	weighted := semaphore.NewWeighted(int64(runtime.NumCPU()))
 	for _, file := range files {
 		file := file
 		eg.Go(func() error {
+			if err := weighted.Acquire(ctx, 1); err != nil {
+				return err
+			}
+			defer weighted.Release(1)
+
 			f, err := os.Open(filepath.Clean(file))
 			if err != nil {
 				return err

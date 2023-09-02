@@ -1,9 +1,15 @@
 package external
 
 import (
+	"bytes"
+	"io"
+	"net/http"
+
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/nao1215/spare/app/domain/model"
+	"github.com/nao1215/spare/app/domain/service"
+	"github.com/nao1215/spare/utils/errfmt"
 )
 
 // newS3Session returns a new session.
@@ -22,4 +28,23 @@ func newS3Session(profile model.AWSProfile, region model.Region, endpoint *model
 		session.Config.DisableSSL = aws.Bool(true)
 	}
 	return session
+}
+
+// detectContentType detects the content type of the file.
+func detectContentType(reader io.Reader) (string, error) {
+	buffer := make([]byte, 512)
+	_, err := reader.Read(buffer)
+	if err != nil && err != io.EOF {
+		return "", errfmt.Wrap(service.ErrNotDetectContentType, err.Error())
+	}
+	return http.DetectContentType(buffer), nil
+}
+
+// duplicateReader duplicates the io.Reader.
+func duplicateReader(r io.Reader) (io.Reader, io.Reader, error) {
+	data, err := io.ReadAll(r)
+	if err != nil {
+		return nil, nil, err
+	}
+	return bytes.NewReader(data), bytes.NewReader(data), nil
 }
