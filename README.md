@@ -151,7 +151,7 @@ $ spare bug-report
 
 ## License
 The spare command is released under the MIT License, see [LICENSE](./LICENSE).
-[testdata](https://www.free-css.com/free-css-templates/page294/primecare) is released under the [Creative Commons](https://www.free-css.com/help-and-support/copyright-notice#terms-of-use).
+[testdata](https://www.free-css.com/free-css-templates/page270/xbee) is released under the [Creative Commons](https://www.free-css.com/help-and-support/copyright-notice#terms-of-use).
 
 ## Special Thanks
 ![localstack](./docs/images/localstack-readme-banner.svg)
