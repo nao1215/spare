@@ -101,6 +101,11 @@ func (b BucketName) Empty() bool {
 	return b == ""
 }
 
+// Domain returns the domain name of the Bucket.
+func (b BucketName) Domain() string {
+	return fmt.Sprintf("%s.s3.amazonaws.com", b.String())
+}
+
 // Validate returns true if the Bucket is valid.
 // Bucket naming rules: https://docs.aws.amazon.com/AmazonS3/latest/userguide/bucketnamingrules.html
 func (b BucketName) Validate() error {

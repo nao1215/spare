@@ -326,3 +326,28 @@ func TestBucketNameValidate(t *testing.T) {
 		})
 	}
 }
+
+func TestBucketNameDomain(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		name string
+		b    BucketName
+		want string
+	}{
+		{
+			name: "success",
+			b:    BucketName("abc"),
+			want: "abc.s3.amazonaws.com",
+		},
+	}
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			if got := tt.b.Domain(); got != tt.want {
+				t.Errorf("BucketName.Domain() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}

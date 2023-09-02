@@ -17,10 +17,12 @@ func NewSpare(profile model.AWSProfile, region model.Region, endpoint *model.End
 	wire.Build(
 		interactor.StorageCreatorSet,
 		interactor.FileUploaderSet,
+		interactor.CDNCreatorSet,
 		external.BuckerCreatorSet,
 		external.FileUploaderSet,
 		external.BucketPublicAccessBlockerSet,
 		external.BucketPolicySetterSet,
+		external.CDNCreatorSet,
 		newSpare,
 	)
 	return nil, nil
@@ -30,6 +32,8 @@ func NewSpare(profile model.AWSProfile, region model.Region, endpoint *model.End
 type Spare struct {
 	// StorageCreator is an interface for creating external storage.
 	StorageCreator usecase.StorageCreator
+	// CDNCreator is an interface for creating CDN.
+	CDNCreator usecase.CDNCreator
 	// FileUploader is an interface for uploading files to external storage.
 	FileUploader usecase.FileUploader
 }
@@ -37,10 +41,12 @@ type Spare struct {
 // newSpare returns a new Spare struct.
 func newSpare(
 	storageCreator usecase.StorageCreator,
+	cdncreator usecase.CDNCreator,
 	fileUploader usecase.FileUploader,
 ) *Spare {
 	return &Spare{
 		StorageCreator: storageCreator,
+		CDNCreator:     cdncreator,
 		FileUploader:   fileUploader,
 	}
 }

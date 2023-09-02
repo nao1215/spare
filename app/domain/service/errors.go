@@ -11,4 +11,6 @@ var (
 	ErrBucketPublicAccessBlock = errors.New("failed to set public access block")
 	// ErrBucketPolicySet is an error that occurs when the bucket policy setting fails.
 	ErrBucketPolicySet = errors.New("failed to set bucket policy")
+	// ErrCDNAlreadyExist is an error that occurs when the CDN already exists.
+	ErrCDNAlreadyExists = errors.New("CDN already exists")
 )
