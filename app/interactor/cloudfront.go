@@ -9,6 +9,8 @@ import (
 )
 
 // CDNCreatorSet is a set of CDNCreator.
+//
+//nolint:gochecknoglobals
 var CDNCreatorSet = wire.NewSet(
 	NewCDNCreator,
 	wire.Struct(new(CDNCreatorOptions), "*"),
