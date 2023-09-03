@@ -82,7 +82,7 @@ func (s *S3Uploader) UploadFile(_ context.Context, input *service.FileUploaderIn
 	if err != nil {
 		return nil, errfmt.Wrap(service.ErrFileUpload, err.Error())
 	}
-	contentType, err := detectContentType(contentDetectReader)
+	contentType, err := detectContentType(contentDetectReader, input.Key)
 	if err != nil {
 		return nil, errfmt.Wrap(service.ErrFileUpload, err.Error())
 	}
@@ -97,7 +97,9 @@ func (s *S3Uploader) UploadFile(_ context.Context, input *service.FileUploaderIn
 	if _, err := s.Upload(uploadInput); err != nil {
 		return nil, err
 	}
-	return &service.FileUploaderOutput{}, nil
+	return &service.FileUploaderOutput{
+		DetectedMIMEType: contentType,
+	}, nil
 }
 
 // BuckerCreatorSet is a provider set for BuckerCreator.

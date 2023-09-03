@@ -3,10 +3,11 @@ package external
 import (
 	"bytes"
 	"io"
-	"net/http"
+	"path/filepath"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/gabriel-vasile/mimetype"
 	"github.com/nao1215/spare/app/domain/model"
 	"github.com/nao1215/spare/app/domain/service"
 	"github.com/nao1215/spare/utils/errfmt"
@@ -31,14 +32,23 @@ func newS3Session(profile model.AWSProfile, region model.Region, endpoint *model
 }
 
 // detectContentType detects the content type of the file.
-func detectContentType(reader io.Reader) (string, error) {
-	const neededBytes = 512
-	buffer := make([]byte, neededBytes)
-	_, err := reader.Read(buffer)
-	if err != nil && err != io.EOF {
+func detectContentType(reader io.Reader, filename string) (string, error) {
+	// We determine CSS and JavaScript based on file extension
+	// because we cannot determine them by mimetype.DetectReader.
+	var extensionToContentType = map[string]string{
+		".css": "text/css",
+		".js":  "application/javascript",
+	}
+	contentType, found := extensionToContentType[filepath.Ext(filename)]
+	if found {
+		return contentType, nil
+	}
+
+	mtype, err := mimetype.DetectReader(reader)
+	if err != nil {
 		return "", errfmt.Wrap(service.ErrNotDetectContentType, err.Error())
 	}
-	return http.DetectContentType(buffer), nil
+	return mtype.String(), nil
 }
 
 // duplicateReader duplicates the io.Reader.

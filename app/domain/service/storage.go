@@ -42,6 +42,8 @@ type FileUploaderInput struct {
 
 // FileUploaderOutput is an output struct for FileUploader.
 type FileUploaderOutput struct {
+	// DetectedMIMEType is the MIME type detected by the library.
+	DetectedMIMEType string
 }
 
 // FileUploader is an interface for uploading files to external storage.
