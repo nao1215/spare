@@ -46,6 +46,16 @@ allowOrigins: []
 debugLocalstackEndpoint: http://localhost:4566
 ```
 
+| Key                            | Default Value | Description                                                                                   |
+|:--------------------------------|:---------------|:-----------------------------------------------------------------------------------------------|
+| `spareTemplateVersion`          |   "0.0.1"             | The version of the Spare template. Unavailable.                                                            |
+| `deployTarget`                 |    src           | The path of the deployment target (SPA).                                                      |
+| `region`                       |   us-east-1| The AWS region.                                                                        |
+| `customDomain`                 |     ""        | The domain name for CloudFront. If not specified, the CloudFront default domain name is used. Unavailable. |
+| `s3BucketName`                 |  spare-{REGION}-{RANDOM_ID}             | The name of the S3 bucket.                                                                    |
+| `allowOrigins`                 |     ""          | The list of domains allowed to access the SPA. Unavailable.                                                |
+| `debugLocalstackEndpoint`      |  http://localhost:4566           | The endpoint for debugging Localstack.                                                         |*
+
 ### build subcommand
 The 'build' subcommand constructs the AWS infrastructure. 
 
