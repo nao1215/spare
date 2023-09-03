@@ -8,8 +8,6 @@
 ![GitHub](https://img.shields.io/github/license/nao1215/spare)
 
 # spare - Single Page Application Release Easily
-Work in progress: Please do not use the code from this repository.
-
 The 'spare' command makes easily the release of Single Page Applications. Spare constructs the infrastructure on AWS to operate the SPA, and then deploys the SPA (please note that it does not support building the SPA). Developers can inspect the infrastructure as CloudFormation before or after its construction.
 
 The infrastructure for S3 and CloudFront is configured as shown in the diagram when you run the "spare build" command.
