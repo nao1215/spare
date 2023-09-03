@@ -61,6 +61,7 @@ func (d *deployer) Parse(cmd *cobra.Command, _ []string) (err error) {
 	return nil
 }
 
+// Do deploy SPA to AWS.
 func (d *deployer) Do() error {
 	log.Info("[  MODE  ]", "debug", d.debug)
 	log.Info("[ CONFIG ]", "profile", d.awsProfile)
@@ -92,16 +93,17 @@ func (d *deployer) Do() error {
 			}()
 
 			key := strings.Replace(file, d.config.DeployTarget.String()+string(filepath.Separator), "", 1)
-			if _, err := d.spare.FileUploader.UploadFile(ctx, &usecase.UploadFileInput{
+			output, err := d.spare.FileUploader.UploadFile(ctx, &usecase.UploadFileInput{
 				BucketName: d.config.S3BucketName,
 				Region:     d.config.Region,
 				// e.g. src/index.html -> index.html
 				Key:  key,
 				Data: f,
-			}); err != nil {
+			})
+			if err != nil {
 				return err
 			}
-			log.Info("[ DEPLOY ]", "file name", key)
+			log.Info("[ DEPLOY ]", "file name", key, "mimetype", output.DetectedMIMEType)
 			return nil
 		})
 	}

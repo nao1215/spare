@@ -103,12 +103,15 @@ func NewFileUploader(opts *FileUploaderOptions) *FileUploader {
 
 // UploadFile uploads a file to external storage.
 func (u *FileUploader) UploadFile(ctx context.Context, input *usecase.UploadFileInput) (*usecase.UploadFileOutput, error) {
-	if _, err := u.opts.FileUploader.UploadFile(ctx, &service.FileUploaderInput{
+	output, err := u.opts.FileUploader.UploadFile(ctx, &service.FileUploaderInput{
 		BucketName: input.BucketName,
 		Key:        input.Key,
 		Data:       input.Data,
-	}); err != nil {
+	})
+	if err != nil {
 		return nil, err
 	}
-	return &usecase.UploadFileOutput{}, nil
+	return &usecase.UploadFileOutput{
+		DetectedMIMEType: output.DetectedMIMEType,
+	}, nil
 }

@@ -12,9 +12,13 @@ Work in progress: Please do not use the code from this repository.
 
 The 'spare' command makes easily the release of Single Page Applications. Spare constructs the infrastructure on AWS to operate the SPA, and then deploys the SPA (please note that it does not support building the SPA). Developers can inspect the infrastructure as CloudFormation before or after its construction.
 
+The infrastructure for S3 and CloudFront is configured as shown in the diagram when you run the "spare build" command.
 ![diagram](./docs/images/s3_cloudfront.png)
 
-The development of the 'spare' command stemmed from the desire to empower frontend engineers to deploy SPAs without relying on the skills of backend engineers, thus enhancing productivity. Additionally, the aim was to reduce the effort for backend engineers in repeatedly setting up common infrastructures. Therefore, the goal is for developers to use the 'spare' command rather than writing CloudFormation scripts.
+
+When you run "spare deploy," it uploads the SPA (Single Page Application) from the specified directory to S3. The diagram below represents a sample SPA delivered by CloudFront. Please note that the "spare" command does not perform TypeScript compilation or any other build steps. It only handles the deployment of your files to S3.
+![sample-spa](./docs/images/sample_spa.jpeg)
+
 
 ## Support OS & golang version
 - Linux
