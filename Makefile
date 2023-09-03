@@ -11,7 +11,7 @@ GOOS        = ""
 GOARCH      = ""
 GO_PKGROOT  = ./...
 GO_PACKAGES = $(shell $(GO_LIST) $(GO_PKGROOT))
-GO_LDFLAGS  = -ldflags '-X github.com/nao1215/spare/version.Version=${VERSION}' -ldflags "-X github.com/nao1215/spare/version.Revision=$(GIT_REVISION)"
+GO_LDFLAGS  = -ldflags '-X github.com/nao1215/spare/version.TagVersion=${VERSION}' -ldflags "-X github.com/nao1215/spare/version.Revision=$(GIT_REVISION)"
 
 build:  ## Build binary
 	env GO111MODULE=on GOOS=$(GOOS) GOARCH=$(GOARCH) $(GO_BUILD) $(GO_LDFLAGS) -o $(APP) main.go
