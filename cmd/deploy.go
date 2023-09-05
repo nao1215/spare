@@ -82,34 +82,39 @@ func (d *deployer) Do() error {
 			}
 			defer weighted.Release(1)
 
-			f, err := os.Open(filepath.Clean(file))
-			if err != nil {
-				return err
-			}
-			defer func() {
-				if closeErr := f.Close(); closeErr != nil {
-					err = closeErr
-				}
-			}()
-
-			key := strings.Replace(file, d.config.DeployTarget.String()+string(filepath.Separator), "", 1)
-			output, err := d.spare.FileUploader.UploadFile(ctx, &usecase.UploadFileInput{
-				BucketName: d.config.S3BucketName,
-				Region:     d.config.Region,
-				// e.g. src/index.html -> index.html
-				Key:  key,
-				Data: f,
-			})
-			if err != nil {
-				return err
-			}
-			log.Info("[ DEPLOY ]", "file name", key, "mimetype", output.DetectedMIMEType)
-			return nil
+			return d.uploadFile(ctx, file)
 		})
 	}
 
 	if err := eg.Wait(); err != nil {
 		return err
 	}
+	return nil
+}
+
+// uploadFile uploads a file to S3.
+func (d *deployer) uploadFile(ctx context.Context, file string) error {
+	f, err := os.Open(filepath.Clean(file))
+	if err != nil {
+		return err
+	}
+	defer func() {
+		if closeErr := f.Close(); closeErr != nil {
+			err = closeErr
+		}
+	}()
+
+	key := strings.Replace(file, d.config.DeployTarget.String()+string(filepath.Separator), "", 1)
+	output, err := d.spare.FileUploader.UploadFile(ctx, &usecase.UploadFileInput{
+		BucketName: d.config.S3BucketName,
+		Region:     d.config.Region,
+		// e.g. src/index.html -> index.html
+		Key:  key,
+		Data: f,
+	})
+	if err != nil {
+		return err
+	}
+	log.Info("[ DEPLOY ]", "file name", key, "mimetype", output.DetectedMIMEType)
 	return nil
 }
