@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"os"
+	"path/filepath"
 
 	"github.com/nao1215/spare/app/di"
 	"github.com/nao1215/spare/app/domain/model"
@@ -21,6 +22,8 @@ type commonOption struct {
 	config *config.Config
 	// debug is a flag that indicates whether to run debug mode.
 	debug bool
+	// configFilePath is a path of the config file.
+	configFilePath string
 	// awsProfile is a profile name of AWS. If this is empty, use $AWS_PROFILE.
 	awsProfile model.AWSProfile
 }
@@ -33,13 +36,18 @@ func parseCommon(cmd *cobra.Command, _ []string) (*commonOption, error) {
 		return nil, errfmt.Wrap(err, "can not parse command line argument (--debug)")
 	}
 
+	configFilePath, err := cmd.Flags().GetString("file")
+	if err != nil {
+		return nil, errfmt.Wrap(err, "can not parse command line argument (--file)")
+	}
+
 	profile, err := cmd.Flags().GetString("profile")
 	if err != nil {
 		return nil, errfmt.Wrap(err, "can not parse command line argument (--profile)")
 	}
 	awsProfile := model.NewAWSProfile(profile)
 
-	config, err := readConfig()
+	config, err := readConfig(configFilePath)
 	if err != nil {
 		return nil, err
 	}
@@ -55,17 +63,18 @@ func parseCommon(cmd *cobra.Command, _ []string) (*commonOption, error) {
 		return nil, err
 	}
 	return &commonOption{
-		ctx:        ctx,
-		spare:      spare,
-		config:     config,
-		debug:      debug,
-		awsProfile: awsProfile,
+		ctx:            ctx,
+		spare:          spare,
+		config:         config,
+		configFilePath: configFilePath,
+		debug:          debug,
+		awsProfile:     awsProfile,
 	}, nil
 }
 
 // readConfig reads .spare.yml and returns config.Config.
-func readConfig() (*config.Config, error) {
-	file, err := os.Open(config.ConfigFilePath)
+func readConfig(configFilePath string) (*config.Config, error) {
+	file, err := os.Open(filepath.Clean(configFilePath))
 	if err != nil {
 		return nil, err
 	}

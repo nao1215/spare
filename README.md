@@ -22,7 +22,7 @@ When you run "spare deploy," it uploads the SPA (Single Page Application) from t
 - Linux
 - MacOS
 - Windows
-- golang 1.21 or later
+- golang 1.20 or later
 
 
 ## How to install

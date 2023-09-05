@@ -30,6 +30,7 @@ func newDeployCmd() *cobra.Command {
 	}
 	cmd.Flags().BoolP("debug", "d", false, "run debug mode. you must run localstack before using this flag")
 	cmd.Flags().StringP("profile", "p", "", "AWS profile name. if this is empty, use $AWS_PROFILE")
+	cmd.Flags().StringP("file", "f", config.ConfigFilePath, "config file path")
 	return cmd
 }
 
