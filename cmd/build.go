@@ -26,6 +26,7 @@ func newBuildCmd() *cobra.Command {
 	}
 	cmd.Flags().BoolP("debug", "d", false, "run debug mode. you must run localstack before using this flag")
 	cmd.Flags().StringP("profile", "p", "", "AWS profile name. if this is empty, use $AWS_PROFILE")
+	cmd.Flags().StringP("file", "f", config.ConfigFilePath, "config file path")
 	return cmd
 }
 
@@ -36,6 +37,8 @@ type builder struct {
 	spare *di.Spare
 	// config is a struct that contains the settings for the spare CLI command.
 	config *config.Config
+	// configFilePath is a path of the config file.
+	configFilePath string
 	// debug is a flag that indicates whether to run debug mode.
 	debug bool
 	// awsProfile is a profile name of AWS. If this is empty, use $AWS_PROFILE.
@@ -51,6 +54,7 @@ func (b *builder) Parse(cmd *cobra.Command, _ []string) (err error) {
 	b.ctx = commonOption.ctx
 	b.spare = commonOption.spare
 	b.config = commonOption.config
+	b.configFilePath = commonOption.configFilePath
 	b.debug = commonOption.debug
 	b.awsProfile = commonOption.awsProfile
 
@@ -60,11 +64,11 @@ func (b *builder) Parse(cmd *cobra.Command, _ []string) (err error) {
 // Do generate .spare.yml at current directory.
 // If .spare.yml already exists, return error.
 func (b *builder) Do() error {
-	log.Info("[VALIDATE] check .spare.yml")
+	log.Info(fmt.Sprintf("[VALIDATE] check %s", b.configFilePath))
 	if err := b.config.Validate(b.debug); err != nil {
 		return err
 	}
-	log.Info("[VALIDATE] ok .spare.yml")
+	log.Info(fmt.Sprintf("[VALIDATE] ok %s", b.configFilePath))
 
 	if err := b.confirm(); err != nil {
 		return err
@@ -99,7 +103,7 @@ func (b *builder) confirm() error {
 	fmt.Printf(" %t\n", b.debug)
 	fmt.Println("[aws profile]")
 	fmt.Printf(" %s\n", b.awsProfile.String())
-	fmt.Println("[.spare.yml]")
+	fmt.Printf("[%s]\n", b.configFilePath)
 	fmt.Printf(" spareTemplateVersion: %s\n", b.config.SpareTemplateVersion)
 	fmt.Printf(" deployTarget: %s\n", b.config.DeployTarget)
 	fmt.Printf(" region: %s\n", b.config.Region)
