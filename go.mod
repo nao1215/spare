@@ -6,7 +6,7 @@ require (
 	github.com/AlecAivazis/survey/v2 v2.3.7
 	github.com/aws/aws-sdk-go v1.45.21
 	github.com/caarlos0/env/v9 v9.0.0
-	github.com/charmbracelet/log v0.2.4
+	github.com/charmbracelet/log v0.2.5
 	github.com/gabriel-vasile/mimetype v1.4.2
 	github.com/google/go-cmp v0.5.9
 	github.com/google/uuid v1.3.1
