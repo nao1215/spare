@@ -9,7 +9,7 @@ require (
 	github.com/charmbracelet/log v0.2.5
 	github.com/gabriel-vasile/mimetype v1.4.3
 	github.com/google/go-cmp v0.6.0
-	github.com/google/uuid v1.3.1
+	github.com/google/uuid v1.4.0
 	github.com/google/wire v0.5.0
 	github.com/nao1215/gorky v0.2.1
 	github.com/spf13/cobra v1.7.0
