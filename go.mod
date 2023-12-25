@@ -12,7 +12,7 @@ require (
 	github.com/google/uuid v1.3.1
 	github.com/google/wire v0.5.0
 	github.com/nao1215/gorky v0.2.1
-	github.com/spf13/cobra v1.7.0
+	github.com/spf13/cobra v1.8.0
 	golang.org/x/sync v0.4.0
 	gopkg.in/yaml.v2 v2.4.0
 )
