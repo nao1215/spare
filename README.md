@@ -7,6 +7,9 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/nao1215/spare)](https://goreportcard.com/report/github.com/nao1215/spare)
 ![GitHub](https://img.shields.io/github/license/nao1215/spare)
 
+> [!IMPORTANT]  
+> I have archived the spare project and transferred its code to [nao1215/rainbow](https://github.com/nao1215/rainbow). If you want to check for updates, please refer to the rainbow project.
+
 # spare - Single Page Application Release Easily
 The 'spare' command makes easily the release of Single Page Applications. Spare constructs the infrastructure on AWS to operate the SPA, and then deploys the SPA (please note that it does not support building the SPA). Developers can inspect the infrastructure as CloudFormation before or after its construction.
 
